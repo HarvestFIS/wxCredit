@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="wxHome">
         <van-nav-bar class="dark_header" title="上标申请列表" fixed :z-index="999" />
         <van-search class="home-search" placeholder="请输入授信编号或者客户名称" background="#fff" show-action v-model="searchValue" @search="onSearch">
             <div slot="action" @click="onSearch">搜索</div>
@@ -32,7 +32,7 @@ import { NavBar, Search, List, Cell, Toast } from 'vant'
 import { findBiddingApplyList } from "api/api"
 import { CONST_ROWS } from "api/constVar"
 export default {
-    name: 'home',
+    name: 'wxHome',
     data() {
         return {
             searchValue: '',
