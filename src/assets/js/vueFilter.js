@@ -9,7 +9,8 @@ Vue.filter('preStatus', (status) => {
         bidding_general_manage: '分管副总',
         bidding_edit: '运营编辑',
         bidding_operate_manage: '运营总监',
-        bidding_ceo: 'CEO'
+        bidding_ceo: 'CEO',
+        bidding_finance: '财务审核'
     }
     return params[status]
 })
@@ -24,7 +25,8 @@ Vue.filter('creditStatus', (status) => {
         bidding_general_manage: '待分管副总审核',
         bidding_edit: '待运营编辑',
         bidding_operate_manage: '待运营总监审核',
-        bidding_ceo: '待CEO审核'
+        bidding_ceo: '待CEO审核',
+        bidding_finance: '财务审核'
     }
     return params[status]
 })

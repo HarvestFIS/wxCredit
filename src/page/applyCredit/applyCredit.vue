@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             tabActive: 'applyForm',
-            type: false,
+            type: 'hide',
             id: ''
         }
     },
@@ -35,7 +35,7 @@ export default {
     methods: {
         onLoad() {
             // 当前进页面是什么类型
-            this.type = this.$route.query.type == 'look' ? false : true
+            this.type = this.$route.query.type == 'look' ? 'hide' : 'show'
             this.id = this.$route.query.id
         },
         onClickLeft() {

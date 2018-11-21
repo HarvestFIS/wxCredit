@@ -4,10 +4,6 @@
             <caption>
                 当前状态: {{ dataList.status | creditStatus }}
             </caption>
-            <!-- <tr>
-                <th>当前状态</th>
-                <td>{{ dataList.status | creditStatus }}</td>
-            </tr> -->
             <tr>
                 <th>审批单编号</th>
                 <td style="width: 90px;">{{ dataList.quotaNo }}</td>
@@ -64,30 +60,51 @@
                 <th>收取方式</th>
                 <td>前置一次性收取</td>
             </tr>
-            <tr v-show="status">
-                <th rowspan="2">审批意见</th>
-                <td colspan="3">
-                    <van-radio-group v-model="radioType">
-                        <van-radio name="1">同意</van-radio>
-                        <van-radio name="2">打回</van-radio>
-                        <van-radio name="3">拒绝</van-radio>
-                    </van-radio-group>
-                </td>
-            </tr>
-            <tr v-show="status">
-                <td colspan="3">
-                    <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
-                </td>
-            </tr>
-            <tr v-show="status">
-                <th></th>
-                <td colspan="3">
-                    <div class="btn-group">
-                        <button class="wx-button wx-button-primary" @click="submit">确认</button>
-                        <button class="wx-button" @click="back">返回</button>
-                    </div>
-                </td> 
-            </tr>
+            <template v-show="status === 'show'">
+                <tr>
+                    <th rowspan="2">审批意见</th>
+                    <td colspan="3">
+                        <van-radio-group v-model="radioType">
+                            <van-radio name="1">同意</van-radio>
+                            <van-radio name="2">打回</van-radio>
+                            <van-radio name="3">拒绝</van-radio>
+                        </van-radio-group>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td colspan="3">
+                        <div class="btn-group">
+                            <button class="wx-button wx-button-primary" @click="submit">确认</button>
+                            <button class="wx-button" @click="back">返回</button>
+                        </div>
+                    </td> 
+                </tr>
+            </template>
+            <template v-if="status === 'finance'">
+                 <tr>
+                    <th>审批意见</th>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td colspan="3">
+                        <div class="btn-group">
+                            <button class="wx-button wx-button-primary" @click="submit">确认</button>
+                            <button class="wx-button" @click="back">返回</button>
+                        </div>
+                    </td> 
+                </tr>
+            </template>
         </table>
 
         <div class="timer-container">
@@ -121,7 +138,7 @@ export default {
             radioType: "1",
             message: '',
             dataList: [],
-            status: false,
+            status: 'hide'
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -138,8 +155,14 @@ export default {
             findBiddingInfo(this.id).then((result) => {
                 Toast.clear()
                 this.dataList = result.data
-                if(this.typeStatus) {
-                    this.status = result.data.hasWorkflowRight
+                if(!this.typeStatus) {
+                    return
+                }
+                // 如果是财务则不显示同意，拒绝
+                if(result.data.status === 'bidding_finance') {
+                    this.status = 'finance'
+                }else {
+                    this.status = result.data.hasWorkflowRight ? 'show' : 'false'
                 }
             }).catch((err) => {
                 console.log(err)
@@ -148,7 +171,7 @@ export default {
         submit() {
             let params = {
                 id: this.id,
-                nextStatus: this.radioType,
+                nextStatus: this.status === 'finance' ? '' : this.radioType, // 如果为财务则传空
                 opinion: this.message
             }
             biddingApproval(params).then((result) => {
