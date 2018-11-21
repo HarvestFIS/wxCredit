@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import wx from 'weixin-js-sdk'
-import { weixinLogin } from './api/api'
 export default {
   name: 'App',
   data() {
@@ -27,20 +25,21 @@ export default {
   },
   methods: {
       initLogin () {
-        console.log()
-        let appid = 'ww1128a730403d63f4'
-        let code = this.getUrlParameter("code", window.location.href)
-        let routeCode = this.$route.query.code
-        if(!code && !routeCode) {
-          let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ document.location.href +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
-          document.location.replace(url)
-          return false
-        }
-        weixinLogin(code).then((result) => {
-          console.log(result)
-        }).catch((err) => {
-          console.log(err)
-        })
+        // let appid = 'ww1128a730403d63f4'
+        // var urls = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent('http://1556433mx4.51mypc.cn/wx/index.html') +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+        // console.log(urls)
+        // let code = this.getUrlParameter("code", window.location.href)
+        // let routeCode = this.$route.query.code
+        // if(!code && !routeCode) {
+        //   let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ document.location.href +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+        //   document.location.replace(url)
+        //   return false
+        // }
+        // weixinLogin(code).then((result) => {
+        //   console.log(result)
+        // }).catch((err) => {
+        //   console.log(err)
+        // })
       },
       getUrlParameter(name, url) {
           url = url.split('?')[1]

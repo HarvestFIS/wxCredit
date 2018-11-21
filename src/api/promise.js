@@ -1,7 +1,8 @@
 // 该文件 集成 后台请求
 import axios from 'axios'
 // import Vue from 'vue'
-
+import { weixinLogin } from './api'
+import { getCookie, getUrlParameter, setCookie } from '../assets/js/util'
 // console.log(Vue)
 
 
@@ -19,6 +20,30 @@ axios.interceptors.request.use(config => {
     // loading.show({
     //     text: '加载中'
     // })
+    console.log(config, 'config')
+    console.log(getCookie('bgsn'), 'cookie')
+    // 如果没有登录cookie就进行微信登录
+    if(!getCookie('bgsn')) {
+        console.log(window.location.href)
+        let appid = 'ww1128a730403d63f4'
+        // let code = getUrlParameter('code', window.location.href)
+        let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
+        let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+        if(!code) {
+            window.location.href = url
+            return
+        }else {
+            if(!getCookie('login')) {
+                setCookie('login', 'wxlogin')
+                weixinLogin(code).then((result) => {
+                    setCookie('login', '')
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
+        }
+        
+    }
     return config
 }, error => {
     // loading.hide()
@@ -31,9 +56,6 @@ axios.interceptors.request.use(config => {
 // http响应拦截器
 axios.interceptors.response.use(data => { // 响应成功关闭loading
     // loading.hide()
-    if (data.data === '') {
-        window.location.href = '#/login'
-    }
     return data
 }, error => {
     // loading.hide()
