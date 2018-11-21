@@ -12,12 +12,46 @@
 </template>
 
 <script>
+import wx from 'weixin-js-sdk'
+import { weixinLogin } from './api/api'
 export default {
   name: 'App',
   data() {
     return {
     	transitionName: "slide-left"
     };
+  },
+  created() {
+    // console.log(wx)
+      this.initLogin()
+  },
+  methods: {
+      initLogin () {
+        console.log()
+        let appid = 'ww1128a730403d63f4'
+        let code = this.getUrlParameter("code", window.location.href)
+        let routeCode = this.$route.query.code
+        if(!code && !routeCode) {
+          let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ document.location.href +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+          document.location.replace(url)
+          return false
+        }
+        weixinLogin(code).then((result) => {
+          console.log(result)
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
+      getUrlParameter(name, url) {
+          url = url.split('?')[1]
+          if(!url) {
+            return ''
+          }
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+          var r = url.match(reg);
+          if (r != null) return unescape(r[2]);
+          return null;
+      }
   },
   watch: {
     $route(to, from) {

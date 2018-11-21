@@ -15,9 +15,15 @@ export const findBiddingInfo = (id) => fetch('/wxApproval/findBiddingInfo', {
 	id: id
 })
 
+/* 详情表单提交 */
 export const biddingApproval = (params) => fetch('/wxApproval/biddingApproval', {
 	id: params.id,
 	nextStatus: params.nextStatus,
 	opinion: params.opinion
+})
+
+/* 微信登录 */
+export const weixinLogin = (code) => fetch('/weixin/weixinLogin', {
+	code: code
 })
 
