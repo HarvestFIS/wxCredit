@@ -13,7 +13,7 @@
             </van-tab>
         </van-tabs>-->
 
-        <apply-container v-bind:typeStatus="type" v-bind:id="id"></apply-container>
+        <apply-container class="apply-tabs" v-bind:typeStatus="type" v-bind:id="id"></apply-container>
     </div>
 </template>
 
