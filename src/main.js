@@ -10,7 +10,6 @@ import './assets/js/vueFilter.js'
 
 Vue.config.productionTip = false
 
-// Vue.use(MintUI)
 Vue.use(Vant)
 // Vue.use(vueFilter)
 

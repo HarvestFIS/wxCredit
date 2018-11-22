@@ -20,31 +20,8 @@ axios.interceptors.request.use(config => {
     // loading.show({
     //     text: '加载中'
     // })
-    console.log(config, 'config')
-    console.log(getCookie('bgsn'), 'cookie')
-    // 如果没有登录cookie就进行微信登录
-    if(!getCookie('bgsn')) {
-        console.log(window.location.href)
-        let appid = 'ww1128a730403d63f4'
-        // let code = getUrlParameter('code', window.location.href)
-        let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
-        let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
-        if(!code) {
-            window.location.href = url
-            return
-        }else {
-            if(!getCookie('login')) {
-                setCookie('login', 'wxlogin')
-                weixinLogin(code).then((result) => {
-                    setCookie('login', '')
-                    window.location.reload()
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }
-        }
-        
-    }
+
+    
     return config
 }, error => {
     // loading.hide()
@@ -63,6 +40,39 @@ axios.interceptors.response.use(data => { // 响应成功关闭loading
     // alert.show({
     //     content: '加载失败'
     // })
+    
+// 微信登录拦截
+    // 如果没有登录cookie就进行微信登录
+    console.log(getCookie('bgsn'))
+    if(!getCookie('bgsn')) {
+        console.log(window.location.href)
+        let appid = 'ww1128a730403d63f4'
+        let code = getUrlParameter('code', window.location.href)
+        // let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
+        let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+        if(!code) {
+            window.location.href = url
+            return
+        }else {
+            if(!getCookie('login')) {
+                setCookie('login', 'wxlogin')
+                weixinLogin(code).then((result) => {
+                    setCookie('login', '')
+                    if(result.success) {
+                        setCookie('bgsn', result.data.bgsn)
+                        window.location.reload()
+                    } else {
+                        alert('企业关联失败，请连接管理员')
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
+        }
+        
+    }
+
+
     return Promise.reject(error)
 })
 
