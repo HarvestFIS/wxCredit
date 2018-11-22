@@ -1,17 +1,19 @@
 <template>
     <div class="applyCredit">
         <van-nav-bar title="上标申请流程" left-text="返回" fixed :z-index="999" left-arrow @click-left="onClickLeft" />
-        <van-tabs class="apply-tabs" type="card" color="#409eff" sticky>
+         <!--<van-tabs class="apply-tabs" type="card" color="#409eff" sticky>
             <van-tab title="表单">
-                <apply-container v-bind:typeStatus="type" v-bind:id="id"></apply-container>
+                
             </van-tab>
-            <van-tab title="流程图">
+           <van-tab title="流程图">
                 流程图
             </van-tab>
             <van-tab title="状态">
                 <apply-stauts></apply-stauts>
             </van-tab>
-        </van-tabs>
+        </van-tabs>-->
+
+        <apply-container v-bind:typeStatus="type" v-bind:id="id"></apply-container>
     </div>
 </template>
 
