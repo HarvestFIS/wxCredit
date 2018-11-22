@@ -37,8 +37,8 @@ export default {
         let that = this
         if(!getCookie('bgsnwx')) {
           let appid = 'ww1128a730403d63f4'
-          // let code = getUrlParameter('code', window.location.href)
-          let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
+          let code = getUrlParameter('code', window.location.href)
+        //   let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
           let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
           if(!code) {
               window.location.href = url
