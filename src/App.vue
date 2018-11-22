@@ -10,6 +10,9 @@
         <router-view class="app-content" />
       </transition>
     </div>
+	<div v-else>
+		企业关联失败，请连接管理员
+	</div>
   </div>
 </template>
 
