@@ -10,9 +10,6 @@
         <router-view class="app-content" />
       </transition>
     </div>
-	<div v-else>
-		企业关联失败，请连接管理员
-	</div>
   </div>
 </template>
 
@@ -48,7 +45,8 @@ export default {
                   weixinLogin(code).then((result) => {
                       setCookie('login', '')
                       if(result.success) {
-                        that.bgsnwx = getCookie('bgsnwx')
+						console.log(getCookie('bgsnwx'))
+						that.bgsnwx = getCookie('bgsnwx')
                       } else {
                           alert('企业关联失败，请连接管理员')
                       }
