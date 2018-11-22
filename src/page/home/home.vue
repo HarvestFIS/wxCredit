@@ -83,10 +83,16 @@ export default {
             }).catch((err) => {
                 console.log(err)
             })
+            
         },
         onLoad() {
             // 初始化页数
             this.page = 1
+            findBiddingApplyList({page: this.page}).then((result) => {
+                
+            }).catch((err) => {
+                console.log(err)
+            })
             findBiddingApplyList({page: this.page}).then((result) => {
                 let data = result.data
                 for(let i = 0; i < data.rows.length; i++) {

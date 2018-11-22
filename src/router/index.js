@@ -5,6 +5,7 @@ Vue.use(Router)
 
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const applyCredit = r => require.ensure([], () => r(require('../page/applyCredit/applyCredit')), 'applyCredit')
+const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
 
 export default new Router({
   routes: [
@@ -29,6 +30,14 @@ export default new Router({
         index: 2
       },
       component: applyCredit
+    },
+    {
+      path: '/login',
+      name: 'login',
+      meta: {
+        index: 98
+      },
+      component: login
     }
   ]
 })

@@ -5,41 +5,58 @@
             <router-view class="app-content" v-if="$route.meta.keepAlive" />
         </keep-alive>
     </transition> -->
-    <transition :name="transitionName">
+    <div v-if="bgsnwx">
+      <transition :name="transitionName">
         <router-view class="app-content" />
-    </transition>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
+import { weixinLogin } from './api/api'
+import { getCookie, getUrlParameter, setCookie } from './assets/js/util'
 export default {
   name: 'App',
   data() {
     return {
-    	transitionName: "slide-left"
+      transitionName: "slide-left",
+      bgsnwx: ''
     };
   },
   created() {
-    // console.log(wx)
       this.initLogin()
   },
   methods: {
       initLogin () {
-        // let appid = 'ww1128a730403d63f4'
-        // var urls = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent('http://1556433mx4.51mypc.cn/wx/index.html') +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
-        // console.log(urls)
-        // let code = this.getUrlParameter("code", window.location.href)
-        // let routeCode = this.$route.query.code
-        // if(!code && !routeCode) {
-        //   let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ document.location.href +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
-        //   document.location.replace(url)
-        //   return false
-        // }
-        // weixinLogin(code).then((result) => {
-        //   console.log(result)
-        // }).catch((err) => {
-        //   console.log(err)
-        // })
+        // 微信登录拦截
+        // 如果没有登录cookie就进行微信登录
+        let that = this
+        if(!getCookie('bgsnwx')) {
+          let appid = 'ww1128a730403d63f4'
+          // let code = getUrlParameter('code', window.location.href)
+          let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
+          let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+          if(!code) {
+              window.location.href = url
+          }else {
+              if(!getCookie('login')) {
+                  setCookie('login', 'wxlogin')
+                  weixinLogin(code).then((result) => {
+                      setCookie('login', '')
+                      if(result.success) {
+                        that.bgsnwx = getCookie('bgsnwx')
+                      } else {
+                          alert('企业关联失败，请连接管理员')
+                      }
+                  }).catch((err) => {
+                      console.log(err)
+                  })
+              }
+          } 
+        } else {
+          this.bgsnwx = getCookie('bgsnwx')
+        }
       },
       getUrlParameter(name, url) {
           url = url.split('?')[1]
