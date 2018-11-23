@@ -52,10 +52,14 @@ const createPromise = (url = "", data = {}, method = 'GET') => {
             params: data
         }
     } else {
+        let formData = new FormData();
+        for(let i in data) {
+            formData.append(i, data[i])
+        }
         _params = {
             method: method,
             url: url,
-            data: data
+            data: formData
         }
     }
     return new Promise((resolve, reject) => {

@@ -22,16 +22,16 @@ Vue.filter('preStatus', (status) => {
 
 Vue.filter('creditStatus', (status) => {
     let params = {
-        bidding_apply: '申请中',
         bidding_business_manage: '待业务总监审核',
         bidding_risk_wait: '待风控经理审核',
         bidding_risk_manage: '待风控总监审核',
         bidding_general_manage: '待分管副总审核',
-        bidding_edit: '待运营编辑',
         bidding_operate_manage: '待运营总监审核',
         bidding_ceo: '待CEO审核',
         bidding_finance: '待财务审核',
         bidding_wait: '待运营发标',
+        bidding_apply: '申请中',
+        bidding_edit: '待运营编辑',
         bidding_approval: "待运营发标",
         bidding_reject: "待运营发标",
         bidding_shelve: "待运营发标"

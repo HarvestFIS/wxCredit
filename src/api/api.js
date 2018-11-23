@@ -17,9 +17,9 @@ export const findBiddingInfo = (id) => fetch('/wxApproval/findBiddingInfo', {
 
 /* 详情表单提交 */
 export const biddingApproval = (params) => fetch('/wxApproval/biddingApproval', {
-	id: params.id,
-	nextStatus: params.nextStatus,
-	opinion: params.opinion
+	"id": params.id,
+	"nextStatus": params.nextStatus,
+	"opinion": params.opinion
 }, 'POST')
 
 /* 微信登录 */
