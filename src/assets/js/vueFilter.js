@@ -11,7 +11,10 @@ Vue.filter('preStatus', (status) => {
         bidding_operate_manage: '运营总监',
         bidding_ceo: 'CEO',
         bidding_finance: '财务审核',
-        bidding_wait: '运营发标'
+        bidding_wait: '运营发标',
+        bidding_approval: "运营发标",
+        bidding_reject: "运营发标",
+        bidding_shelve: "运营发标"
     }
     return params[status]
 })
@@ -28,7 +31,10 @@ Vue.filter('creditStatus', (status) => {
         bidding_operate_manage: '待运营总监审核',
         bidding_ceo: '待CEO审核',
         bidding_finance: '待财务审核',
-        bidding_wait: '待运营发标'
+        bidding_wait: '待运营发标',
+        bidding_approval: "待运营发标",
+        bidding_reject: "待运营发标",
+        bidding_shelve: "待运营发标"
     }
     return params[status]
 })

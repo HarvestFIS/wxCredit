@@ -53,6 +53,6 @@ export default {
 }
 .apply-tabs {
     margin-top: 56px;
-    padding-top: 40px;
+    // padding-top: 40px;
 }
 </style>

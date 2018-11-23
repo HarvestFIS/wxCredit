@@ -45,7 +45,7 @@ export default {
                   weixinLogin(code).then((result) => {
                       setCookie('login', '')
                       if(result.data.success) {
-						that.bgsnwx = getCookie('bgsnwx')
+						              that.bgsnwx = getCookie('bgsnwx')
                       } else {
                           alert('企业关联失败，请连接管理员')
                       }
