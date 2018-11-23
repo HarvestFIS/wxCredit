@@ -60,7 +60,7 @@
                 <th>收取方式</th>
                 <td>前置一次性收取</td>
             </tr>
-            <template v-show="status === 'show'">
+            <template v-if="status === 'show'">
                 <tr>
                     <th rowspan="2">审批意见</th>
                     <td colspan="3">
@@ -89,9 +89,7 @@
             <template v-if="status === 'finance'">
                  <tr>
                     <th>审批意见</th>
-                </tr>
-                <tr>
-                    <td colspan="3">
+                     <td colspan="3">
                         <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
                     </td>
                 </tr>
