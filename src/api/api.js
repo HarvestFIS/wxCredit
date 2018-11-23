@@ -20,7 +20,7 @@ export const biddingApproval = (params) => fetch('/wxApproval/biddingApproval', 
 	id: params.id,
 	nextStatus: params.nextStatus,
 	opinion: params.opinion
-})
+}, 'POST')
 
 /* 微信登录 */
 export const weixinLogin = (code) => fetch('/weixin/weixinLogin', {
