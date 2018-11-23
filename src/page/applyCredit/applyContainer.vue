@@ -45,8 +45,9 @@
             <tr>
                 <th>服务费率</th>
                 <td>{{ dataList.serviceFee }}</td>
-                <th>还款方式</th>
-                <td>{{ dataList.repaymentType == 2 ? "按月付息到期还本" : ""}}</td>
+                <th>服务费</th>
+                <td>{{ dataList.serviceFeeAmount }}</td>
+                
             </tr>
             <tr>
                 <th>推荐渠道</th>
@@ -55,10 +56,10 @@
                 <td>{{ dataList.productName }}</td>
             </tr>
             <tr>
+                <th>还款方式</th>
+                <td>{{ dataList.repaymentType == 2 ? "按月付息到期还本" : ""}}</td>
                 <th>经办人</th>
                 <td>{{ dataList.updater }}</td>
-                <th>收取方式</th>
-                <td>前置一次性收取</td>
             </tr>
             <template v-if="status === 'show'">
                 <tr>
