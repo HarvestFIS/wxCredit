@@ -13,7 +13,7 @@
             </van-tab>
         </van-tabs>-->
 
-        <apply-container class="apply-tabs" v-bind:typeStatus="type" v-bind:id="id"></apply-container>
+        <apply-container class="apply-tabs" v-bind:id="id"></apply-container>
     </div>
 </template>
 
@@ -26,7 +26,6 @@ export default {
     data() {
         return {
             tabActive: 'applyForm',
-            type: 'hide',
             id: ''
         }
     },
@@ -36,8 +35,6 @@ export default {
     },
     methods: {
         onLoad() {
-            // 当前进页面是什么类型
-            this.type = this.$route.query.type == 'look' ? 'hide' : 'show'
             this.id = this.$route.query.id
         },
         onClickLeft() {

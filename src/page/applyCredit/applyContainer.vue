@@ -132,7 +132,7 @@ import { RadioGroup, Radio, Toast } from 'vant'
 import { findBiddingInfo, biddingApproval } from 'api/api'
 export default {
     name: 'applyContainer',
-    props: ["typeStatus", "id"],
+    props: ["id"],
     data() {
         return {
             radioType: "1",
@@ -155,9 +155,6 @@ export default {
             findBiddingInfo(this.id).then((result) => {
                 Toast.clear()
                 this.dataList = result.data
-                if(!this.typeStatus) {
-                    return
-                }
                 // 如果是财务则不显示同意，拒绝
                 if(result.data.status === 'bidding_finance') {
                     this.status = 'finance'
