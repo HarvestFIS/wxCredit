@@ -182,7 +182,10 @@ export default {
             })
         },
         back() {
-            this.$router.push('/home')
+            this.$router.push({
+                path: '/home', 
+                query: {isloading: true}
+            })
         }
     }
 }

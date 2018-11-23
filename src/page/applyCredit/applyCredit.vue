@@ -38,7 +38,10 @@ export default {
             this.id = this.$route.query.id
         },
         onClickLeft() {
-            this.$router.push('/home')
+            this.$router.push({
+                path: '/home', 
+                query: {isloading: true}
+            })
         }
     }
 }

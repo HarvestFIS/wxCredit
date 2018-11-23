@@ -12,7 +12,7 @@
                 <span>操作</span>
             </div>
 
-            <van-list v-model="loading" :finished="finished">
+            <van-list v-model="loading" :finished="finished" @load="onLoad">
                 <van-cell v-for="item in list" v-bind:key="item.no" class="home-item-content">
                     <span>{{ item.quotaNo }}</span>
                     <span>{{ item.customerName }}</span>
@@ -43,8 +43,14 @@ export default {
         }
     },
     components: { NavBar, Search, List, Cell, Toast },
+    mounted() {
+        console.log(this.loading, 'false')
+    },
     created() {
-        this.onLoad()
+        let state = this.$route.query.isloading
+        if(state) {
+            this.onLoad()
+        }
     },
     methods: {
         onSearch() {
@@ -87,7 +93,7 @@ export default {
         },
         onLoad() {
             // 初始化页数
-            this.page = 1
+            // this.page = 1
             findBiddingApplyList({page: this.page}).then((result) => {
                 let data = result.data
                 for(let i = 0; i < data.rows.length; i++) {
