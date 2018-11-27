@@ -26,15 +26,15 @@
                 <th>期限</th>
                 <td>{{ mainItem.limitRisk }}天</td>
                 <th>宽限期</th>
-                <td>{{ mainItem.gracePeriodRisk  }}天</td>
+                <td>{{ mainItem.gracePeriodRisk }}天</td>
             </tr>
         </table>
         <table class="apply" border="1">
             <tr>
                 <th>抵押物价值</th>
-                <td style="width: 90px;">{{ dataList.mortgageAmount }}</td>
+                <td style="width: 90px;">{{ dataList.mortgageAmount }}万元</td>
                 <th>抵押率</th>
-                <td>{{ dataList.mortgageRate }}</td>
+                <td>{{ dataList.mortgageRate }}%</td>
             </tr>
             <tr>
                 <th>综合费率</th>
@@ -46,7 +46,7 @@
                 <th>服务费率</th>
                 <td>{{ dataList.serviceFee }}</td>
                 <th>服务费</th>
-                <td>{{ dataList.serviceFeeAmount }}</td>
+                <td>{{ dataList.serviceFeeAmount }}元</td>
                 
             </tr>
             <tr>
@@ -169,6 +169,10 @@ export default {
                 id: this.id,
                 nextStatus: this.status === 'finance' ? '' : this.radioType, // 如果为财务则传空
                 opinion: this.message
+            }
+            if(!this.message.trim()) {
+                Toast('意见不能为空')
+                return false
             }
             biddingApproval(params).then((result) => {
                 let data = result.data
