@@ -177,7 +177,10 @@ export default {
             biddingApproval(params).then((result) => {
                 let data = result.data
                 if(data.success) {
-                    this.$router.push('/home')
+                    this.$router.push({
+                        path: '/home', 
+                        query: {isloading: true}
+                    })
                 } else {
                     Toast(data.message)
                 }
