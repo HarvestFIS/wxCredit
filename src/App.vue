@@ -33,7 +33,7 @@ export default {
         // 如果没有登录cookie就进行微信登录
         let that = this
         if(!getCookie('bgsnwx')) {
-          let appid = 'ww1128a730403d63f4'
+          let appid = 'ww0e12d5b0fb096677'
           let code = getUrlParameter('code', window.location.href)
         //   let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
           let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
@@ -47,7 +47,7 @@ export default {
                       if(result.data.success) {
 						              that.bgsnwx = getCookie('bgsnwx')
                       } else {
-                          alert('企业关联失败，请连接管理员')
+                          alert('企业关联失败，请联系管理员')
                       }
                   }).catch((err) => {
                       console.log(err)
