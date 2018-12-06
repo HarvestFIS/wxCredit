@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import  AssignTableList from '../page/Assign/AssignTableList'
+import  Assigindetails from '../page/Assign/Assigindetails'
+import  AssignOperation from '../page/Assign/AssignOperation'
+
+
 
 Vue.use(Router)
 
@@ -38,6 +43,23 @@ export default new Router({
         index: 98
       },
       component: login
-    }
+    },
+     {
+        path: '/assigntablelist',
+        name: 'AssignTableList',
+        component: AssignTableList
+      },
+      {
+        path: '/assigindetails',
+        name: 'Assigindetails',
+        component: Assigindetails
+      },
+      {
+        path: '/assignoperation',
+        name: 'AssignOperation',
+        component: AssignOperation
+      },
+
+      
   ]
 })

@@ -12,11 +12,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/wxApproval': {
-        target: 'http://192.168.8.43',
+        target: 'http://192.168.8.66',
         changeOrigin: true
       },
       '/weixin': {
-        target: 'http://192.168.8.43',
+        target: 'http://192.168.8.66',
         changeOrigin: true
       }
     },
