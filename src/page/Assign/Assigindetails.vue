@@ -23,7 +23,7 @@
                 <table class="apply marginB10" border="1">
                         <tr>
                             <th>申请总金额</th>
-                            <td style="width: 90px;">{{quota.applyAmount}}</td>
+                            <td style="width: 90px;">{{quota.applyAmount}}元</td>
                             <th>综合费率</th>
                             <td>{{extend.formalitiesFee}}</td>
                         </tr>
@@ -88,7 +88,7 @@
                             <th>服务费率</th>
                             <td style="width: 90px;">{{risk.serviceFee}}</td>
                             <th>抵押率</th>
-                            <td>{{risk.guaranteeFee}}%</td>
+                            <td>{{risk.guaranteeFee}}</td>
                         </tr>
                 </table>
            </div>
