@@ -23,7 +23,7 @@
                 <table class="apply marginB10" border="1">
                         <tr>
                             <th>申请总金额</th>
-                            <td style="width: 90px;">{{quota.applyAmount}}元</td>
+                            <td style="width: 90px;">{{quota.applyAmount}}万元</td>
                             <th>综合费率</th>
                             <td>{{extend.formalitiesFee}}</td>
                         </tr>
@@ -191,9 +191,9 @@
             },
             btn(){
                 if(this.radio == "2"){
-                    this.message = "同意"
-                }else  if(this.radio == "3"){
                     this.message = "退回"
+                }else  if(this.radio == "3"){
+                    this.message = "拒绝"
                 }else{
                     this.message = "同意"
                 }
