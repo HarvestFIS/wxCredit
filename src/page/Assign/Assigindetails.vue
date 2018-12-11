@@ -92,7 +92,7 @@
                         </tr>
                 </table>
            </div>
-           <div v-if="this.dataItem.hasWorkflowRight">
+         <div v-if="dataItem.hasWorkflowRight && dataItem.quota.status != 'assign_manage'">
             <h3 class="mb10 font14" style="color:red;">授信审批基本信息：</h3>
                 <div class="boxradio">
                     <div class="fl ml10 font14" style="100px;">是否同意授信：</div>
@@ -120,7 +120,7 @@
         data(){
             return{
                 radio:'1',
-                message:'',
+                message:'同意',
                 id:this.$router.currentRoute.query.id,
                 dataItem:[],
                 quota:{},
@@ -201,9 +201,6 @@
         },
         created () {
           this.load();  
-        },
-        updated() {
-            this.btn();
         },
         components: {
             RadioGroup,Radio

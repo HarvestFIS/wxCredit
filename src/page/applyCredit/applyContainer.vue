@@ -135,7 +135,7 @@ export default {
     data() {
         return {
             radioType: "1",
-            message: '',
+            message: '同意',
             dataList: [],
             status: 'hide',
         }
@@ -203,9 +203,6 @@ export default {
                 this.message = "同意"
             }
          }
-    },
-    updated(){
-        this.btn();
     }
 }
 </script>

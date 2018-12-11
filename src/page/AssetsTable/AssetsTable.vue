@@ -11,18 +11,19 @@
               </tr>
                <tr v-for="item in listTbale.biz" :key="item.name" >
                  <td>{{item.bizPersonnelType | assetstableType}}</td>
-                 <td>{{item.channelTitle}}</td>
+                 <td>{{item.titleItem}}</td>
                  <td>{{item.title}}</td>
-                 <td style="width:70px;">{{item.loanAmount}}万</td>
-                 <td style="width:70px;">{{item.paymentAmount}}万</td>
+                 <td style="width:80px;">{{item.loanAmount}}万</td>
+                 <td style="width:80px;">{{item.paymentAmount}}万</td>
                  <td style="width:90px;">{{item.endTime | formatTime}}</td>
               </tr>
+              <tr style="height:40px; background:#bd8f2d;">
+                  <td colspan="3">合计</td>
+                  <td>{{listTbale.loanAmount}}万</td>
+                  <td>{{listTbale.paymentAmount}}万</td>
+                  <td></td>
+              </tr>
           </table>
-          <div class="allAmoountBox">
-              <span class="leftAll">合计</span>
-              <span>{{listTbale.loanAmount}}万</span>
-              <span>{{listTbale.paymentAmount}}万</span>
-          </div>
         </div>
 </template>
 <script>
@@ -41,8 +42,19 @@
                 .then((res)=>{
 
                    res.data.biz.map((data)=>{
-                       data.loanAmount = ( data.loanAmount / 10000).toFixed(2)
-                       data.paymentAmount =  (data.paymentAmount / 10000).toFixed(2)
+                       data.loanAmount = ( data.loanAmount / 10000).toFixed(2);
+                       data.paymentAmount =  (data.paymentAmount / 10000).toFixed(2);
+
+                       if(data.assetsOfCompany){
+                           if(data.channelTitle == null){
+                              data.titleItem  = data.assetsOfCompany;
+                           }else{
+                                data.titleItem  = data.assetsOfCompany+"－" + data.channelTitle;
+                           }
+                       }else{
+                            data.titleItem  =  data.channelTitle;
+                       }
+                
                    })
                    res.data.loanAmount = (res.data.loanAmount / 10000).toFixed(2);
                    res.data.paymentAmount = (res.data.paymentAmount / 10000).toFixed(2);
@@ -63,8 +75,9 @@
                 var tb=document.getElementById('table1');
                 var i = 0;
                 var j = 0;
-                var rowCount = tb.rows.length; //   行数 
+                var rowCount = tb.rows.length -1; //   行数 
                 var colCount = tb.rows[0].cells.length; //   列数 
+              
                 var obj1 = null;
                 var obj2 = null;
                 var obj3 = null;
@@ -137,20 +150,8 @@ th{
     color: #fff;
 }
 
-.allAmoountBox{
-    width: 650px;
-    height: 30px;
-    background: #bd8f2d;
-    color: #fff;
-    line-height: 30px;
-    text-align: center;
-}
 .fl{
     float: left;
-}
-.leftAll{
-    width: 324px;
-    display: inline-block;
 }
 
 .mr30{
@@ -238,6 +239,9 @@ th{
     background: #eee;
 }
 #tb__48_2,#tb__48_3,#tb__48_4{
+    background: #eee;
+}
+#tb__50_2,#tb__50_3,#tb__50_4{
     background: #eee;
 }
 
