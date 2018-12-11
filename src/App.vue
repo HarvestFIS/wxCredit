@@ -21,11 +21,11 @@ export default {
   data() {
     return {
       transitionName: "slide-left",
-      bgsnwx: '11'
+      bgsnwx: ''
     };
   },
   created() {
-    //   this.initLogin()
+      this.initLogin()
   },
   methods: {
       initLogin () {
