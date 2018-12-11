@@ -96,7 +96,7 @@
             <h3 class="mb10 font14" style="color:red;">授信审批基本信息：</h3>
                 <div class="boxradio">
                     <div class="fl ml10 font14" style="100px;">是否同意授信：</div>
-                       <van-radio-group v-model="radio" class="fl">
+                       <van-radio-group v-model="radio" class="fl" @change="btn()">
                                 <van-radio name="1" class="fl font14" style="width:80px;">同意</van-radio>
                                 <van-radio name="2" class="fl font14" style="width:80px;">退回</van-radio>
                                 <van-radio name="3" class="fl font14">拒绝</van-radio>
@@ -119,7 +119,7 @@
         // props: ["id"],
         data(){
             return{
-                radio:'',
+                radio:'1',
                 message:'',
                 id:this.$router.currentRoute.query.id,
                 dataItem:[],
@@ -188,10 +188,22 @@
                         message: '系统错误，请刷新重试'
                     })
                  })
+            },
+            btn(){
+                if(this.radio == "2"){
+                    this.message = "同意"
+                }else  if(this.radio == "3"){
+                    this.message = "退回"
+                }else{
+                    this.message = "同意"
+                }
             }
         },
         created () {
           this.load();  
+        },
+        updated() {
+            this.btn();
         },
         components: {
             RadioGroup,Radio

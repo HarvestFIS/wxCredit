@@ -11,14 +11,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/wxApproval': {
-        target: 'http://192.168.8.66',
-        changeOrigin: true
-      },
-      '/weixin': {
-        target: 'http://192.168.8.66',
-        changeOrigin: true
-      }
+        '/':{
+            target: 'http://192.168.8.64',
+            changeOrigin: true
+        }
     },
 
     // Various Dev Server settings

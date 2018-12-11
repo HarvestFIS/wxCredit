@@ -50,6 +50,14 @@ Vue.filter('formatTime', (dateTime) => {
     let hh = date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()
     let mm = date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes()
     let ss = date.getSeconds() < 10 ? ("0" + date.getSeconds()) : date.getSeconds()
-    return Y + '-' + M + '-' + D + ' ' + hh + ':' + mm + ':' + ss
+    return Y + '-' + M + '-' + D ;
     
+})
+
+Vue.filter('assetstableType', (status) => {
+    if(status == 'PERSONNEL'){
+        return  '小微'
+    }else{
+        return  '供应链'
+    }
 })

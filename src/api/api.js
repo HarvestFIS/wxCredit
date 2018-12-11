@@ -57,6 +57,13 @@ export const findListZhipai = (params) => fetch('/wxApproval/findQuotaApprovalLi
 	customerName: params.customerName ? params.customerName : ''
 })
 
+/* 资产表单 */
+export const findLoanAssetReportTable = (date) => fetch('/wxReport/findLoanAssetReport', {
+	dateStr: date
+})
+
+
+
 
 
 

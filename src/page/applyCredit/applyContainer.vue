@@ -65,7 +65,7 @@
                 <tr>
                     <th rowspan="2">审批意见</th>
                     <td colspan="3">
-                        <van-radio-group v-model="radioType">
+                        <van-radio-group v-model="radioType"  @change = "btn()">
                             <van-radio name="1">同意</van-radio>
                             <van-radio name="2">打回</van-radio>
                             <van-radio name="3">拒绝</van-radio>
@@ -137,7 +137,7 @@ export default {
             radioType: "1",
             message: '',
             dataList: [],
-            status: 'hide'
+            status: 'hide',
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -193,7 +193,19 @@ export default {
                 path: '/home', 
                 query: {isloading: true}
             })
-        }
+        },
+         btn(){
+            if(this.radioType == "2"){
+                this.message = "打回"
+            }else  if(this.radioType == "3"){
+                this.message = "拒绝"
+            }else{
+                this.message = "同意"
+            }
+         }
+    },
+    updated(){
+        this.btn();
     }
 }
 </script>

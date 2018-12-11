@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import  AssignTableList from '../page/Assign/AssignTableList'
 import  Assigindetails from '../page/Assign/Assigindetails'
 import  AssignOperation from '../page/Assign/AssignOperation'
+import  AssetsTable from '../page/AssetsTable/AssetsTable'
+
 
 
 
@@ -59,6 +61,13 @@ export default new Router({
         name: 'AssignOperation',
         component: AssignOperation
       },
+
+      {
+        path: '/assetstable',
+        name: 'AssetsTable',
+        component: AssetsTable
+      },
+
 
       
   ]
