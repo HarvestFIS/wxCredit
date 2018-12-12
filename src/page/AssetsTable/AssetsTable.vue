@@ -174,6 +174,8 @@ import { Toast,Dialog } from 'vant'
                 text-align: center;
                 padding: 0px !important;
                 margin: 0px !important;
+                height: 20px;
+                line-height: 15px;
                 
             }
             #tb__2_2,#tb__2_3,#tb__2_4{
