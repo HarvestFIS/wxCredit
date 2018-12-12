@@ -154,6 +154,7 @@ import { Toast,Dialog } from 'vant'
 #table1{
     border-collapse:collapse;
     width: 100%;
+    font-size: 12px;
 }
 
 #table1,th, td{
