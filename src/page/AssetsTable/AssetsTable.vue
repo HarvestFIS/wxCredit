@@ -150,6 +150,10 @@ import { Toast,Dialog } from 'vant'
      }
 </script>
 <style lang="scss">
+ #table1 tr.bac td{
+        height:30px; 
+        background:#bd8f2d;
+    }
 .asstetstable{
         width: 100%;
         font-size: 12px;
@@ -263,10 +267,7 @@ import { Toast,Dialog } from 'vant'
             background: #eee;
             }
         }
-        .bac{
-            height:30px; 
-            background:#bd8f2d;
-        }
+       
 
     }
 
