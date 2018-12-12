@@ -13,11 +13,12 @@
                  <td>{{item.bizPersonnelType | assetstableType}}</td>
                  <td>{{item.titleItem}}</td>
                  <td>{{item.title}}</td>
-                 <td style="width:80px;">{{item.loanAmount}}万</td>
-                 <td style="width:80px;">{{item.paymentAmount}}万</td>
-                 <td style="width:90px;">{{item.endTime | formatTime}}</td>
+                 <td style="width:70px;">{{item.loanAmount}}万</td>
+                 <td style="width:70px;">{{item.paymentAmount}}万</td>
+                 <td style="width:80px;">{{item.endTime | formatTime}}</td>
               </tr>
-              <tr style="height:40px; background:#bd8f2d;">
+             
+              <tr class="bac">
                   <td colspan="3">合计</td>
                   <td>{{listTbale.loanAmount}}万</td>
                   <td>{{listTbale.paymentAmount}}万</td>
@@ -28,6 +29,8 @@
 </template>
 <script>
     import {findLoanAssetReportTable } from 'api/api'
+import { Toast,Dialog } from 'vant'
+
      
      export default {
         data () {
@@ -38,9 +41,21 @@
         },
         methods: {
             onload(){
+                Toast({
+                    type: 'loading',
+                    mask: true,
+                    message: '加载中...'
+                })
                 findLoanAssetReportTable(this.dateStr)
                 .then((res)=>{
-
+                  Toast.clear()
+                  if(res.data.biz.length<=0){
+                    Dialog.alert({
+                        title: '提示',
+                        message: '没有数据'
+                    })
+                    return 
+                  }
                    res.data.biz.map((data)=>{
                        data.loanAmount = ( data.loanAmount / 10000).toFixed(2);
                        data.paymentAmount =  (data.paymentAmount / 10000).toFixed(2);
@@ -135,9 +150,10 @@
      }
 </script>
 <style lang="scss">
+
 #table1{
     border-collapse:collapse;
-    width: 650px;
+    width: 100%;
 }
 
 #table1,th, td{
@@ -152,6 +168,10 @@ th{
 
 .fl{
     float: left;
+}
+.bac{
+    height:40px; 
+    background:#bd8f2d;
 }
 
 .mr30{
