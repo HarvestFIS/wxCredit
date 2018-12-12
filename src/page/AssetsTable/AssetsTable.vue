@@ -2,12 +2,12 @@
         <div class="asstetstable">
           <table id="table1">
               <tr>
-                 <th style="width:15px;">部门</th>
-                 <th style="width:60px;">性质</th>
+                 <th style="width:12px;">部门</th>
+                 <th style="width:80px;">性质</th>
                  <th style="width:80px;">基础资产</th>
                  <th style="width:50px;">借款金额</th>
                  <th style="width:50px;">兑付金额</th>
-                 <th style="width:75px;">原到期日</th>
+                 <th style="width:50px;">原到期日</th>
               </tr>
                <tr v-for="item in listTbale.biz" :key="item.name" >
                  <td>{{item.bizPersonnelType | assetstableType}}</td>
