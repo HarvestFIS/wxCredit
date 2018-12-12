@@ -2,20 +2,20 @@
         <div class="asstetstable">
           <table id="table1">
               <tr>
-                 <th>部门</th>
-                 <th>性质</th>
-                 <th>基础资产</th>
-                 <th>借款金额</th>
-                 <th>兑付金额</th>
-                 <th>原到期日</th>
+                 <th style="width:15px;">部门</th>
+                 <th style="width:45px;">性质</th>
+                 <th style="width:80px;">基础资产</th>
+                 <th style="width:50px;">借款金额</th>
+                 <th style="width:50px;">兑付金额</th>
+                 <th style="width:80px;">原到期日</th>
               </tr>
                <tr v-for="item in listTbale.biz" :key="item.name" >
                  <td>{{item.bizPersonnelType | assetstableType}}</td>
                  <td>{{item.titleItem}}</td>
                  <td>{{item.title}}</td>
-                 <td style="width:70px;">{{item.loanAmount}}万</td>
-                 <td style="width:70px;">{{item.paymentAmount}}万</td>
-                 <td style="width:80px;">{{item.endTime | formatTime}}</td>
+                 <td>{{item.loanAmount}}万</td>
+                 <td>{{item.paymentAmount}}万</td>
+                 <td>{{item.endTime | formatTime}}</td>
               </tr>
              
               <tr class="bac">
@@ -161,7 +161,7 @@ import { Toast,Dialog } from 'vant'
     border: 2px solid #999;
     text-align: center;
 }
-th{
+#table1 th{
     height: 30px;
     background: #98b0f1;
     color: #fff;
@@ -170,7 +170,7 @@ th{
 .fl{
     float: left;
 }
-.bac{
+#table1 .bac{
     height:40px; 
     background:#bd8f2d;
 }
