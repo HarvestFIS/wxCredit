@@ -150,120 +150,121 @@ import { Toast,Dialog } from 'vant'
      }
 </script>
 <style lang="scss">
+.asstetstable{
+        width: 100%;
+        font-size: 12px;
+    #table1{
+        border-collapse:collapse;
+        width: 100%;
+        font-size: 12px;
+        border: 2px solid #999;
+        text-align: center;
+        tr{
+            th{
+                border: 2px solid #999;
+                text-align: center;
+                height: 30px;
+                background: #98b0f1;
+                color: #fff;
+            }
+            td{
+                border: 2px solid #999;
+                text-align: center;
+            }
+            #tb__2_2,#tb__2_3,#tb__2_4{
+            background: #eee;
+            }
+            #tb__4_2,#tb__4_3,#tb__4_4{
+            background: #eee;
+            }
+            #tb__6_2,#tb__6_3,#tb__6_4{
+            background: #eee;
+            }
+            #tb__8_2,#tb__8_3,#tb__8_4{
+            background: #eee;
+            }
+            #tb__10_2,#tb__10_3,#tb__10_4{
+            background: #eee;
+            }
+            #tb__12_2,#tb__12_3,#tb__12_4{
+            background: #eee;
+            }
+            #tb__14_2,#tb__14_3,#tb__14_4{
+            background: #eee;
+            }
+            #tb__16_2,#tb__16_3,#tb__16_4{
+            background: #eee;
+            }
+            #tb__18_2,#tb__18_3,#tb__18_4{
+            background: #eee;
+            }
+            #tb__20_2,#tb__20_3,#tb__20_4{
+            background: #eee;
+            }
+            #tb__22_2,#tb__22_3,#tb__22_4{
+            background: #eee;
+            }
+            #tb__24_2,#tb__24_3,#tb__24_4{
+            background: #eee;
+            }
+            #tb__26_2,#tb__26_3,#tb__26_4{
+            background: #eee;
+            }
+            #tb__28_2,#tb__28_3,#tb__28_4{
+            background: #eee;
+            }
 
-#table1{
-    border-collapse:collapse;
-    width: 100%;
-    font-size: 12px;
+            #tb__30_2,#tb__30_3,#tb__30_4{
+            background: #eee;
+            }
+            #tb__30_2,#tb__30_3,#tb__30_4{
+            background: #eee;
+            }
+            #tb__30_2,#tb__30_3,#tb__30_4{
+            background: #eee;
+            }
+
+            #tb__32_2,#tb__32_3,#tb__32_4{
+            background: #eee;
+            }
+            #tb__34_2,#tb__34_3,#tb__34_4{
+            background: #eee;
+            }
+            #tb__36_2,#tb__36_3,#tb__36_4{
+            background: #eee;
+            }
+            #tb__38_2,#tb__38_3,#tb__38_4{
+            background: #eee;
+            }
+            #tb__40_2,#tb__40_3,#tb__40_4{
+            background: #eee;
+            }
+            #tb__42_2,#tb__42_3,#tb__42_4{
+            background: #eee;
+            }
+            #tb__44_2,#tb__44_3,#tb__44_4{
+            background: #eee;
+            }
+
+            #tb__46_2,#tb__46_3,#tb__46_4{
+            background: #eee;
+            }
+            #tb__48_2,#tb__48_3,#tb__48_4{
+            background: #eee;
+            }
+            #tb__50_2,#tb__50_3,#tb__50_4{
+            background: #eee;
+            }
+        }
+        .bac{
+            height:30px; 
+            background:#bd8f2d;
+        }
+
+    }
+
 }
 
-#table1,th, td{
-    border: 2px solid #999;
-    text-align: center;
-}
-#table1 th{
-    height: 30px;
-    background: #98b0f1;
-    color: #fff;
-}
 
-.fl{
-    float: left;
-}
-#table1 .bac{
-    height:40px; 
-    background:#bd8f2d;
-}
-
-.mr30{
-    margin-right: 30px;
-}
-.mr50{
-    margin-right: 50px;
-}
-#tb__2_2,#tb__2_3,#tb__2_4{
-    background: #eee;
-}
-#tb__4_2,#tb__4_3,#tb__4_4{
-    background: #eee;
-}
-#tb__6_2,#tb__6_3,#tb__6_4{
-    background: #eee;
-}
-#tb__8_2,#tb__8_3,#tb__8_4{
-    background: #eee;
-}
-#tb__10_2,#tb__10_3,#tb__10_4{
-    background: #eee;
-}
-#tb__12_2,#tb__12_3,#tb__12_4{
-    background: #eee;
-}
-#tb__14_2,#tb__14_3,#tb__14_4{
-    background: #eee;
-}
-#tb__16_2,#tb__16_3,#tb__16_4{
-    background: #eee;
-}
-#tb__18_2,#tb__18_3,#tb__18_4{
-    background: #eee;
-}
-#tb__20_2,#tb__20_3,#tb__20_4{
-    background: #eee;
-}
-#tb__22_2,#tb__22_3,#tb__22_4{
-    background: #eee;
-}
-#tb__24_2,#tb__24_3,#tb__24_4{
-    background: #eee;
-}
-#tb__26_2,#tb__26_3,#tb__26_4{
-    background: #eee;
-}
-#tb__28_2,#tb__28_3,#tb__28_4{
-    background: #eee;
-}
-
-#tb__30_2,#tb__30_3,#tb__30_4{
-    background: #eee;
-}
-#tb__30_2,#tb__30_3,#tb__30_4{
-    background: #eee;
-}
-#tb__30_2,#tb__30_3,#tb__30_4{
-    background: #eee;
-}
-
-#tb__32_2,#tb__32_3,#tb__32_4{
-    background: #eee;
-}
-#tb__34_2,#tb__34_3,#tb__34_4{
-    background: #eee;
-}
-#tb__36_2,#tb__36_3,#tb__36_4{
-    background: #eee;
-}
-#tb__38_2,#tb__38_3,#tb__38_4{
-    background: #eee;
-}
-#tb__40_2,#tb__40_3,#tb__40_4{
-    background: #eee;
-}
-#tb__42_2,#tb__42_3,#tb__42_4{
-    background: #eee;
-}
-#tb__44_2,#tb__44_3,#tb__44_4{
-    background: #eee;
-}
-
-#tb__46_2,#tb__46_3,#tb__46_4{
-    background: #eee;
-}
-#tb__48_2,#tb__48_3,#tb__48_4{
-    background: #eee;
-}
-#tb__50_2,#tb__50_3,#tb__50_4{
-    background: #eee;
-}
 
 </style>
