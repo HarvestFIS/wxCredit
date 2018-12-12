@@ -166,10 +166,15 @@ import { Toast,Dialog } from 'vant'
                 height: 30px;
                 background: #98b0f1;
                 color: #fff;
+                padding: 0px !important;
+                margin: 0px !important;
             }
             td{
                 border: 2px solid #999;
                 text-align: center;
+                padding: 0px !important;
+                margin: 0px !important;
+                
             }
             #tb__2_2,#tb__2_3,#tb__2_4{
             background: #eee;
