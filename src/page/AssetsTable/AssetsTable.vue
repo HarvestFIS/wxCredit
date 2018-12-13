@@ -36,6 +36,7 @@ import { Toast,Dialog } from 'vant'
         data () {
             return {
                 dateStr:this.$router.currentRoute.query.dateStr,
+                dateEnd:this.$router.currentRoute.query.dateEnd,
                 listTbale:{}
             }
         },
@@ -46,7 +47,7 @@ import { Toast,Dialog } from 'vant'
                     mask: true,
                     message: '加载中...'
                 })
-                findLoanAssetReportTable(this.dateStr)
+                findLoanAssetReportTable(this.dateStr,this.dateEnd)
                 .then((res)=>{
                   Toast.clear()
                   if(res.data.biz.length<=0){

@@ -58,8 +58,9 @@ export const findListZhipai = (params) => fetch('/wxApproval/findQuotaApprovalLi
 })
 
 /* 资产表单 */
-export const findLoanAssetReportTable = (date) => fetch('/wxReport/findLoanAssetReport', {
-	dateStr: date
+export const findLoanAssetReportTable = (date,dateEnd) => fetch('/wxReport/findLoanAssetReport', {
+    dateStr: date,
+    dateEnd:dateEnd
 })
 
 
