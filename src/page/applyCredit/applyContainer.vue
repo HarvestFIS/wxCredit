@@ -61,49 +61,41 @@
                 <th>经办人</th>
                 <td>{{ dataList.updater }}</td>
             </tr>
-            <template v-if="status === 'show'">
-                <tr>
-                    <th rowspan="2">审批意见</th>
-                    <td colspan="3">
-                        <van-radio-group v-model="radioType"  @change = "btn()">
-                            <van-radio name="1">同意</van-radio>
-                            <van-radio name="2">打回</van-radio>
-                            <van-radio name="3">拒绝</van-radio>
-                        </van-radio-group>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td colspan="3">
-                        <div class="btn-group">
-                            <button class="wx-button wx-button-primary" @click="submit">确认</button>
-                            <button class="wx-button" @click="back">返回</button>
-                        </div>
-                    </td> 
-                </tr>
-            </template>
-            <template v-if="status === 'finance'">
-                 <tr>
-                    <th>审批意见</th>
-                     <td colspan="3">
-                        <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td colspan="3">
-                        <div class="btn-group">
-                            <button class="wx-button wx-button-primary" @click="submit">确认</button>
-                            <button class="wx-button" @click="back">返回</button>
-                        </div>
-                    </td> 
-                </tr>
-            </template>
+            <tr>
+                <th rowspan="2">审批意见</th>
+                <td colspan="3" style="padding: 0;">
+                    <van-radio-group v-model="radioType" @change="btn()">
+                        <van-cell-group>
+                            <van-cell title="同意" clickable @click="radioType='1'">
+                                <van-radio name="1" />
+                            </van-cell>
+                            <van-cell title="打回到助理" clickable @click="radioType='2'">
+                                <van-radio name="2" />
+                            </van-cell>
+                                <van-cell title="打回到风控" clickable @click="radioType='4'">
+                                <van-radio name="4" />
+                            </van-cell>
+                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-if="status === 'show'">
+                                <van-radio name="3" />
+                            </van-cell>
+                        </van-cell-group>
+                    </van-radio-group>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td colspan="3">
+                    <div class="btn-group">
+                        <button class="wx-button wx-button-primary" @click="submit">确认</button>
+                        <button class="wx-button" @click="back">返回</button>
+                    </div>
+                </td> 
+            </tr>
         </table>
 
         <div class="timer-container">
@@ -167,7 +159,7 @@ export default {
         submit() {
             let params = {
                 id: this.id,
-                nextStatus: this.status === 'finance' ? '' : this.radioType, // 如果为财务则传空
+                nextStatus: this.radioType, 
                 opinion: this.message
             }
             if(!this.message.trim()) {
@@ -196,10 +188,12 @@ export default {
         },
          btn(){
             if(this.radioType == "2"){
-                this.message = "打回"
+                this.message = "打回到助理"
             }else  if(this.radioType == "3"){
                 this.message = "拒绝"
-            }else{
+            }else if(this.radioType == "4"){
+                this.message = "打回到风控"
+            }else {
                 this.message = "同意"
             }
          }
@@ -354,5 +348,18 @@ export default {
     background: $backgroundColor;
 }
 
+.van-cell {
+    padding: 5px 15px;
+}
+.van-cell__title span {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+.van-cell__value .van-radio {
+    display: flex;
+    height: 100%;
+     align-items: center;
+}
 </style>
 

@@ -44,7 +44,7 @@ export default {
     },
     components: { NavBar, Search, List, Cell, Toast },
     mounted() {
-        console.log(this.loading, 'false')
+        // console.log(this.loading, 'false')
     },
     created() {
         let state = this.$route.query.isloading
