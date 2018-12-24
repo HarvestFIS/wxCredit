@@ -61,7 +61,7 @@
                 <th>经办人</th>
                 <td>{{ dataList.updater }}</td>
             </tr>
-            <tr>
+            <tr v-if="status">
                 <th rowspan="2">审批意见</th>
                 <td colspan="3" style="padding: 0;">
                     <van-radio-group v-model="radioType" @change="btn()">
@@ -69,25 +69,28 @@
                             <van-cell title="同意" clickable @click="radioType='1'">
                                 <van-radio name="1" />
                             </van-cell>
-                            <van-cell title="打回到助理" clickable @click="radioType='2'">
+                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage1">
                                 <van-radio name="2" />
                             </van-cell>
-                                <van-cell title="打回到风控" clickable @click="radioType='4'">
+                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage2">
                                 <van-radio name="4" />
                             </van-cell>
-                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-if="status === 'show'">
+                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage3">
+                                <van-radio name="2" />
+                            </van-cell>
+                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage4">
                                 <van-radio name="3" />
                             </van-cell>
                         </van-cell-group>
                     </van-radio-group>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="status">
                 <td colspan="3">
                     <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="status">
                 <th></th>
                 <td colspan="3">
                     <div class="btn-group">
@@ -129,7 +132,11 @@ export default {
             radioType: "1",
             message: '同意',
             dataList: [],
-            status: 'hide',
+            status: false,
+            manage1: true, // 打回到助理
+            manage2: true, // 打回到风控
+            manage3: false, // 打回到运营编辑
+            manage4: true, // 是否有拒绝
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -146,11 +153,25 @@ export default {
             findBiddingInfo(this.id).then((result) => {
                 Toast.clear()
                 this.dataList = result.data
-                // 如果是财务则不显示同意，拒绝
-                if(result.data.status === 'bidding_finance') {
-                    this.status = 'finance'
-                }else {
-                    this.status = result.data.hasWorkflowRight ? 'show' : 'false'
+                // hasWorkflowRight -> 是否显示审批意见
+                // 如果是财务则不显示拒绝）
+                // bidding_business_manage 只有打回到业务助理
+                // bidding_operate_manage 只有打回到运营编辑，传2
+                this.status = result.data.hasWorkflowRight ? true : false
+                switch(result.data.status) {
+                    case 'bidding_finance':
+                        this.status = 'finance'
+                    break;
+                    case 'bidding_business_manage':
+                        this.manage1 = true
+                        this.manage2 = false
+                        this.manage3 = false
+                    break;
+                    case 'bidding_operate_manage':
+                         this.manage1 = false
+                        this.manage2 = false
+                        this.manage3 = true
+                    break;
                 }
             }).catch((err) => {
                 console.log(err)
@@ -188,7 +209,11 @@ export default {
         },
          btn(){
             if(this.radioType == "2"){
-                this.message = "打回到助理"
+                if(this.manage3) {
+                    this.message = "打回到运营编辑"
+                } else {
+                    this.message = "打回到助理"
+                }
             }else  if(this.radioType == "3"){
                 this.message = "拒绝"
             }else if(this.radioType == "4"){
