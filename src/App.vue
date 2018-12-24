@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { weixinLogin } from './api/api'
+import { weixinLogin, findCorpId } from './api/api'
 import { getCookie, getUrlParameter, setCookie } from './assets/js/util'
 export default {
   name: 'App',
@@ -33,27 +33,29 @@ export default {
         // 如果没有登录cookie就进行微信登录
         let that = this
         if(!getCookie('bgsnwx')) {
-          let appid = 'ww0e12d5b0fb096677'
-          let code = getUrlParameter('code', window.location.href)
-        //   let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
-          let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
-          if(!code) {
-              window.location.href = url
-          }else {
-              if(!getCookie('login')) {
-                  setCookie('login', 'wxlogin')
-                  weixinLogin(code).then((result) => {
-                      setCookie('login', '')
-                      if(result.data.success) {
-						              that.bgsnwx = getCookie('bgsnwx')
-                      } else {
-                          alert('企业关联失败，请联系管理员')
-                      }
-                  }).catch((err) => {
-                      console.log(err)
-                  })
-              }
-          } 
+            findCorpId().then((result) => {
+                let appid = result.data
+                let code = getUrlParameter('code', window.location.href)
+                //   let code = 'C4ltxwZuDGUBmFmteFwxXqrJnbuZf483WNCx3gHBk2o'
+                let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+                if(!code) {
+                    window.location.href = url
+                }else {
+                    if(!getCookie('login')) {
+                        setCookie('login', 'wxlogin')
+                        weixinLogin(code).then((result) => {
+                            setCookie('login', '')
+                            if(result.data.success) {
+                                that.bgsnwx = getCookie('bgsnwx')
+                            } else {
+                                alert('企业关联失败，请联系管理员')
+                            }
+                        }).catch((err) => {
+                            console.log(err)
+                        })
+                    }
+                } 
+            })
         } else {
           this.bgsnwx = getCookie('bgsnwx')
         }

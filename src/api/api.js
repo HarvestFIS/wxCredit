@@ -2,6 +2,9 @@ import fetch from './promise.js'
 import { CONST_ROWS } from './constVar.js'
 
 
+/* 获取appId */
+export const findCorpId = () => fetch('/wxApproval/findCorpId')
+
 /* 获取首页列表页数据 */
 export const findBiddingApplyList = (params) => fetch('/wxApproval/findBiddingList', {
 	page: params.page ? params.page : 1,
