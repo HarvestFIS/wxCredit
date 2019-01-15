@@ -63,7 +63,7 @@
             </tr>
             <tr v-if="status == 'finance'">
                 <th>应收服务费说明</th>
-                <td colspan="3">{{ dataList.serviceFeeRemark }}</td>
+                <td colspan="3"><pre>{{ dataList.serviceFeeRemark }}</pre></td>
             </tr>
             <tr v-if="status == 'finance'">
                 <th>实收服务费金额</th>
@@ -121,7 +121,7 @@
                 <th></th>
                 <td colspan="3">
                     <div class="btn-group">
-                        <button class="wx-button wx-button-primary" @click="submit">确认</button>
+                        <button class="wx-button wx-button-primary" @click="submitWait">确认</button>
                     </div>
                 </td> 
             </tr>
@@ -149,7 +149,7 @@
 
 <script>
 import { RadioGroup, Radio, Toast } from 'vant'
-import { findBiddingInfo, biddingApproval } from 'api/api'
+import { findBiddingInfo, biddingApproval, biddingShopsMortgage } from 'api/api'
 export default {
     name: 'applyContainer',
     props: ["id"],
@@ -162,7 +162,7 @@ export default {
             dataList: [],
             status: false, // 控件输入内容的
             // 1. 打回到助理 2. 打回到风控 3. 打回到运营编辑 4. 是否有拒绝
-            manage: [true, true, false, true],
+            manage: [true, true, true, true],
             bidding_wait: false, // 运营发标
         }
     }, 
@@ -180,6 +180,8 @@ export default {
             findBiddingInfo(this.id).then((result) => {
                 Toast.clear()
                 this.dataList = result.data
+                this.serviceFeeFact = result.data.serviceFeeFact
+                this.serviceFeeRemarkFact = result.data.serviceFeeRemarkFact
                 // hasWorkflowRight -> 是否显示审批意见
                 // 如果是财务则不显示拒绝）
                 // bidding_business_manage 只有打回到业务助理
@@ -228,6 +230,21 @@ export default {
                 return false
             }
             biddingApproval(params).then((result) => {
+                let data = result.data
+                if(data.success) {
+                    this.$router.push({
+                        path: '/home', 
+                        query: {isloading: true}
+                    })
+                } else {
+                    Toast(data.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        submitWait() {
+            biddingShopsMortgage(this.id).then((result) => {
                 let data = result.data
                 if(data.success) {
                     this.$router.push({

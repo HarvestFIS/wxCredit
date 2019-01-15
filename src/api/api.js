@@ -22,7 +22,9 @@ export const findBiddingInfo = (id) => fetch('/wxApproval/findBiddingInfo', {
 export const biddingApproval = (params) => fetch('/wxApproval/biddingApproval', {
 	"id": params.id,
 	"nextStatus": params.nextStatus,
-	"opinion": params.opinion
+	"opinion": params.opinion,
+	"serviceFeeFact": params.serviceFeeFact,
+    "serviceFeeRemarkFact": params.serviceFeeRemarkFact
 }, 'POST')
 
 /* 微信登录 */
@@ -64,6 +66,11 @@ export const findListZhipai = (params) => fetch('/wxApproval/findQuotaApprovalLi
 export const findLoanAssetReportTable = (date,dateEnd) => fetch('/wxReport/findLoanAssetReport', {
     dateStr: date,
     dateEnd:dateEnd
+})
+
+/* 待发标 */
+export const biddingShopsMortgage = (id) => fetch('/wxApproval/biddingShopsMortgage', {
+	biddingId: id
 })
 
 
