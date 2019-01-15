@@ -61,6 +61,23 @@
                 <th>经办人</th>
                 <td>{{ dataList.updater }}</td>
             </tr>
+            <tr v-if="status == 'finance'">
+                <th>应收服务费说明</th>
+                <td colspan="3">{{ dataList.serviceFeeRemark }}</td>
+            </tr>
+            <tr v-if="status == 'finance'">
+                <th>实收服务费金额</th>
+                <td colspan="3" style="position: relative;">
+                    <input style="padding-right: 20px;" type="number" class="rate" placeholder="输入实收服务费金额" v-model="serviceFeeFact" >
+                    <span style="position: absolute; right: 8px; top: 16px;">元</span>
+                </td>
+            </tr>
+            <tr v-if="status == 'finance'">
+                <th>实收服务费说明</th>
+                <td colspan="3">
+                    <textarea name="content" id="" placeholder="输入应收服务费说明" v-model="serviceFeeRemarkFact" cols="30" rows="5"></textarea>
+                </td>
+            </tr>
             <tr v-if="status">
                 <th rowspan="2">审批意见</th>
                 <td colspan="3" style="padding: 0;">
@@ -69,16 +86,16 @@
                             <van-cell title="同意" clickable @click="radioType='1'">
                                 <van-radio name="1" />
                             </van-cell>
-                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage1">
+                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage[1]">
                                 <van-radio name="2" />
                             </van-cell>
-                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage2">
+                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage[2]">
                                 <van-radio name="4" />
                             </van-cell>
-                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage3">
+                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage[3]">
                                 <van-radio name="2" />
                             </van-cell>
-                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage4">
+                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage[4]">
                                 <van-radio name="3" />
                             </van-cell>
                         </van-cell-group>
@@ -87,7 +104,7 @@
             </tr>
             <tr v-if="status">
                 <td colspan="3">
-                    <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
+                    <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="5"></textarea>
                 </td>
             </tr>
             <tr v-if="status">
@@ -96,6 +113,15 @@
                     <div class="btn-group">
                         <button class="wx-button wx-button-primary" @click="submit">确认</button>
                         <button class="wx-button" @click="back">返回</button>
+                    </div>
+                </td> 
+            </tr>
+
+            <tr v-if="bidding_wait">
+                <th></th>
+                <td colspan="3">
+                    <div class="btn-group">
+                        <button class="wx-button wx-button-primary" @click="submit">确认</button>
                     </div>
                 </td> 
             </tr>
@@ -131,12 +157,13 @@ export default {
         return {
             radioType: "1",
             message: '同意',
+            serviceFeeFact: '',
+            serviceFeeRemarkFact: '',
             dataList: [],
-            status: false,
-            manage1: true, // 打回到助理
-            manage2: true, // 打回到风控
-            manage3: false, // 打回到运营编辑
-            manage4: true, // 是否有拒绝
+            status: false, // 控件输入内容的
+            // 1. 打回到助理 2. 打回到风控 3. 打回到运营编辑 4. 是否有拒绝
+            manage: [true, true, false, true],
+            bidding_wait: false, // 运营发标
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -157,21 +184,28 @@ export default {
                 // 如果是财务则不显示拒绝）
                 // bidding_business_manage 只有打回到业务助理
                 // bidding_operate_manage 只有打回到运营编辑，传2
+                // bidding_wait 其它的输入全部都隐藏，只单独显示一个操作按钮
                 this.status = result.data.hasWorkflowRight ? true : false
                 switch(result.data.status) {
                     case 'bidding_finance':
                         this.status = 'finance'
+                        this.manage[3] = false
                     break;
                     case 'bidding_business_manage':
-                        this.manage1 = true
-                        this.manage2 = false
-                        this.manage3 = false
+                        this.manage[1] = true
+                        this.manage[2] = false
+                        this.manage[3] = false
                     break;
                     case 'bidding_operate_manage':
-                         this.manage1 = false
-                        this.manage2 = false
-                        this.manage3 = true
+                        this.manage[1] = false
+                        this.manage[2] = false
+                        this.manage[3] = true
                     break;
+                    case 'bidding_wait':
+                        this.status = false
+                        this.bidding_wait = true
+                    break;
+
                 }
             }).catch((err) => {
                 console.log(err)
@@ -181,7 +215,13 @@ export default {
             let params = {
                 id: this.id,
                 nextStatus: this.radioType, 
-                opinion: this.message
+                opinion: this.message,
+                serviceFeeFact: this.serviceFeeFact,
+                serviceFeeRemarkFact: this.serviceFeeRemarkFact
+            }
+            if(this.status == 'finance' && !this.serviceFeeFact.trim()) {
+                Toast('实收服务费金额不能为空')
+                return false
             }
             if(!this.message.trim()) {
                 Toast('意见不能为空')
@@ -262,7 +302,7 @@ export default {
         color: #606266;
         background: $backgroundColor;
     }
-    textarea {
+    textarea, .rate {
         width: 100%;
         font-size: 13px;
         border: 1px solid transparent;
