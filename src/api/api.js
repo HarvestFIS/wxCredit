@@ -24,7 +24,7 @@ export const biddingApproval = (params) => fetch('/wxApproval/biddingApproval', 
 	"nextStatus": params.nextStatus,
 	"opinion": params.opinion,
 	"serviceFeeFact": params.serviceFeeFact,
-    "serviceFeeRemarkFact": params.serviceFeeRemarkFact
+    "serviceFeeFactDate": params.serviceFeeFactDate
 }, 'POST')
 
 /* 微信登录 */

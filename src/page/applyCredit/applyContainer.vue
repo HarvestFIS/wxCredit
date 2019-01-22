@@ -73,9 +73,20 @@
                 </td>
             </tr>
             <tr v-if="status == 'finance'">
-                <th>实收服务费说明</th>
+                <th>实收服务费日期</th>
                 <td colspan="3">
-                    <textarea name="content" id="" placeholder="输入应收服务费说明" v-model="serviceFeeRemarkFact" cols="30" rows="5"></textarea>
+                    <input style="padding-right: 20px;" type="text" @focus="dateFocus" readonly class="rate" placeholder="输入实收服务费日期" v-model="serviceFeeFactDate" >
+                    <van-popup v-model="show" position="bottom" :overlay="true">
+                        <van-datetime-picker
+                        v-model="currentDate"
+                        type="date"
+                        
+                        @cancel="dateCancel"
+                        @confirm="dateConfirm"
+                        :formatter="formatter" />
+                        <!-- :min-date="minDate"
+                        :max-date="maxDate" -->
+                    </van-popup>
                 </td>
             </tr>
             <tr v-if="status">
@@ -148,7 +159,7 @@
 </template>
 
 <script>
-import { RadioGroup, Radio, Toast } from 'vant'
+import { RadioGroup, Radio, Toast, Popup } from 'vant'
 import { findBiddingInfo, biddingApproval, biddingShopsMortgage } from 'api/api'
 export default {
     name: 'applyContainer',
@@ -158,12 +169,16 @@ export default {
             radioType: "1",
             message: '同意',
             serviceFeeFact: '',
-            serviceFeeRemarkFact: '',
+            serviceFeeFactDate: '',
             dataList: [],
             status: false, // 控件输入内容的
             // 1. 打回到助理 2. 打回到风控 3. 打回到运营编辑 4. 是否有拒绝
             manage: [true, true, true, true],
             bidding_wait: false, // 运营发标
+            show: false,
+            // minDate: new Date(2018, 1, 1),
+            // maxDate: new Date(2099, 12, 31),
+            currentDate: new Date()
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -181,7 +196,8 @@ export default {
                 Toast.clear()
                 this.dataList = result.data
                 this.serviceFeeFact = result.data.serviceFeeFact
-                this.serviceFeeRemarkFact = result.data.serviceFeeRemarkFact
+                this.serviceFeeFactDate = result.data.serviceFeeFactDate
+                this.currentDate = result.data.serviceFeeFactDate ? new Date(result.data.serviceFeeFactDate) : new Date()
                 // hasWorkflowRight -> 是否显示审批意见
                 // 如果是财务则不显示拒绝）
                 // bidding_business_manage 只有打回到业务助理
@@ -213,22 +229,51 @@ export default {
                 console.log(err)
             })
         },
+        dateFocus() {
+            this.show = true
+        },
+        dateCancel() {
+            this.show = false
+        },
+        dateConfirm() {
+            let currentTime = new Date(this.currentDate);
+            let month = parseInt(currentTime.getMonth() + 1) >= 10 ? parseInt(currentTime.getMonth() + 1) : "0" + parseInt(currentTime.getMonth() + 1) 
+            let day = currentTime.getDate() >= 10 ? currentTime.getDate() : "0" + currentTime.getDate()
+            this.serviceFeeFactDate = currentTime.getFullYear() + '-' + month + '-' + day
+            this.show = false
+        },
+        formatter(type, value) {
+            if (type === 'year') {
+                return `${value}年`;
+            } else if (type === 'month') {
+                return `${value}月`
+            } else if (type === 'day') {
+                return `${value}日`
+            }
+            return value;
+        },
         submit() {
             let params = {
                 id: this.id,
                 nextStatus: this.radioType, 
                 opinion: this.message,
                 serviceFeeFact: this.serviceFeeFact,
-                serviceFeeRemarkFact: this.serviceFeeRemarkFact
+                serviceFeeFactDate: this.serviceFeeFactDate
             }
-            if(this.status == 'finance' && !this.serviceFeeFact.trim()) {
+            if(this.status == 'finance' && !this.serviceFeeFact) {
                 Toast('实收服务费金额不能为空')
+                return false
+            }
+            
+            if(this.status == 'finance' &&　!this.serviceFeeFactDate) {
+                Toast('实收服务费日期不能为空')
                 return false
             }
             if(!this.message.trim()) {
                 Toast('意见不能为空')
                 return false
             }
+
             biddingApproval(params).then((result) => {
                 let data = result.data
                 if(data.success) {
