@@ -2,6 +2,9 @@ import fetch from './promise.js'
 import { CONST_ROWS } from './constVar.js'
 
 
+/* 获取appId */
+export const findCorpId = () => fetch('/wxApproval/findCorpId')
+
 /* 获取首页列表页数据 */
 export const findBiddingApplyList = (params) => fetch('/wxApproval/findBiddingList', {
 	page: params.page ? params.page : 1,
@@ -19,7 +22,9 @@ export const findBiddingInfo = (id) => fetch('/wxApproval/findBiddingInfo', {
 export const biddingApproval = (params) => fetch('/wxApproval/biddingApproval', {
 	"id": params.id,
 	"nextStatus": params.nextStatus,
-	"opinion": params.opinion
+	"opinion": params.opinion,
+	"serviceFeeFact": params.serviceFeeFact,
+    "serviceFeeFactDate": params.serviceFeeFactDate
 }, 'POST')
 
 /* 微信登录 */
@@ -64,6 +69,12 @@ export const findLoanAssetReportTable = (date,dateEnd) => fetch('/wxReport/findL
 })
 // 资产月付息预期提醒报表
 export const InterestOverdue = () => fetch('/wxReport/findLoanAssetInterestOverdue')
+
+/* 待发标 */
+export const biddingShopsMortgage = (id) => fetch('/wxApproval/biddingShopsMortgage', {
+	biddingId: id
+})
+
 
 
 

@@ -61,49 +61,81 @@
                 <th>经办人</th>
                 <td>{{ dataList.updater }}</td>
             </tr>
-            <template v-if="status === 'show'">
-                <tr>
-                    <th rowspan="2">审批意见</th>
-                    <td colspan="3">
-                        <van-radio-group v-model="radioType"  @change = "btn()">
-                            <van-radio name="1">同意</van-radio>
-                            <van-radio name="2">打回</van-radio>
-                            <van-radio name="3">拒绝</van-radio>
-                        </van-radio-group>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td colspan="3">
-                        <div class="btn-group">
-                            <button class="wx-button wx-button-primary" @click="submit">确认</button>
-                            <button class="wx-button" @click="back">返回</button>
-                        </div>
-                    </td> 
-                </tr>
-            </template>
-            <template v-if="status === 'finance'">
-                 <tr>
-                    <th>审批意见</th>
-                     <td colspan="3">
-                        <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="10"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td colspan="3">
-                        <div class="btn-group">
-                            <button class="wx-button wx-button-primary" @click="submit">确认</button>
-                            <button class="wx-button" @click="back">返回</button>
-                        </div>
-                    </td> 
-                </tr>
-            </template>
+            <tr v-if="status == 'finance'">
+                <th>应收服务费说明</th>
+                <td colspan="3"><pre>{{ dataList.serviceFeeRemark }}</pre></td>
+            </tr>
+            <tr v-if="status == 'finance'">
+                <th>实收服务费金额</th>
+                <td colspan="3" style="position: relative;">
+                    <input style="padding-right: 20px;" type="number" class="rate" placeholder="输入实收服务费金额" v-model="serviceFeeFact" >
+                    <span style="position: absolute; right: 8px; top: 16px;">元</span>
+                </td>
+            </tr>
+            <tr v-if="status == 'finance'">
+                <th>实收服务费日期</th>
+                <td colspan="3">
+                    <input style="padding-right: 20px;" type="text" @focus="dateFocus" readonly class="rate" placeholder="输入实收服务费日期" v-model="serviceFeeFactDate" >
+                    <van-popup v-model="show" position="bottom" :overlay="true">
+                        <van-datetime-picker
+                        v-model="currentDate"
+                        type="date"
+                        
+                        @cancel="dateCancel"
+                        @confirm="dateConfirm"
+                        :formatter="formatter" />
+                        <!-- :min-date="minDate"
+                        :max-date="maxDate" -->
+                    </van-popup>
+                </td>
+            </tr>
+            <tr v-if="status">
+                <th rowspan="2">审批意见</th>
+                <td colspan="3" style="padding: 0;">
+                    <van-radio-group v-model="radioType" @change="btn()">
+                        <van-cell-group>
+                            <van-cell title="同意" clickable @click="radioType='1'">
+                                <van-radio name="1" />
+                            </van-cell>
+                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage[1]">
+                                <van-radio name="2" />
+                            </van-cell>
+                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage[2]">
+                                <van-radio name="4" />
+                            </van-cell>
+                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage[3]">
+                                <van-radio name="2" />
+                            </van-cell>
+                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage[4]">
+                                <van-radio name="3" />
+                            </van-cell>
+                        </van-cell-group>
+                    </van-radio-group>
+                </td>
+            </tr>
+            <tr v-if="status">
+                <td colspan="3">
+                    <textarea name="content" id="" placeholder="输入意见说明" v-model="message" cols="30" rows="5"></textarea>
+                </td>
+            </tr>
+            <tr v-if="status">
+                <th></th>
+                <td colspan="3">
+                    <div class="btn-group">
+                        <button class="wx-button wx-button-primary" @click="submit">确认</button>
+                        <button class="wx-button" @click="back">返回</button>
+                    </div>
+                </td> 
+            </tr>
+
+            <tr v-if="bidding_wait">
+                <th></th>
+                <td colspan="3">
+                    <div class="btn-group">
+                        <button class="wx-button wx-button-primary" @click="submitWait">确认</button>
+                    </div>
+                </td> 
+            </tr>
         </table>
 
         <div class="timer-container">
@@ -127,8 +159,8 @@
 </template>
 
 <script>
-import { RadioGroup, Radio, Toast } from 'vant'
-import { findBiddingInfo, biddingApproval } from 'api/api'
+import { RadioGroup, Radio, Toast, Popup } from 'vant'
+import { findBiddingInfo, biddingApproval, biddingShopsMortgage } from 'api/api'
 export default {
     name: 'applyContainer',
     props: ["id"],
@@ -136,8 +168,17 @@ export default {
         return {
             radioType: "1",
             message: '同意',
+            serviceFeeFact: '',
+            serviceFeeFactDate: '',
             dataList: [],
-            status: 'hide',
+            status: false, // 控件输入内容的
+            // 1. 打回到助理 2. 打回到风控 3. 打回到运营编辑 4. 是否有拒绝
+            manage: [true, true, true, true],
+            bidding_wait: false, // 运营发标
+            show: false,
+            // minDate: new Date(2018, 1, 1),
+            // maxDate: new Date(2099, 12, 31),
+            currentDate: new Date()
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -154,27 +195,101 @@ export default {
             findBiddingInfo(this.id).then((result) => {
                 Toast.clear()
                 this.dataList = result.data
-                // 如果是财务则不显示同意，拒绝
-                if(result.data.status === 'bidding_finance') {
-                    this.status = 'finance'
-                }else {
-                    this.status = result.data.hasWorkflowRight ? 'show' : 'false'
+                this.serviceFeeFact = result.data.serviceFeeFact
+                this.serviceFeeFactDate = result.data.serviceFeeFactDate
+                this.currentDate = result.data.serviceFeeFactDate ? new Date(result.data.serviceFeeFactDate) : new Date()
+                // hasWorkflowRight -> 是否显示审批意见
+                // 如果是财务则不显示拒绝）
+                // bidding_business_manage 只有打回到业务助理
+                // bidding_operate_manage 只有打回到运营编辑，传2
+                // bidding_wait 其它的输入全部都隐藏，只单独显示一个操作按钮
+                this.status = result.data.hasWorkflowRight ? true : false
+                switch(result.data.status) {
+                    case 'bidding_finance':
+                        this.status = 'finance'
+                        this.manage[3] = false
+                    break;
+                    case 'bidding_business_manage':
+                        this.manage[1] = true
+                        this.manage[2] = false
+                        this.manage[3] = false
+                    break;
+                    case 'bidding_operate_manage':
+                        this.manage[1] = false
+                        this.manage[2] = false
+                        this.manage[3] = true
+                    break;
+                    case 'bidding_wait':
+                        this.status = false
+                        this.bidding_wait = true
+                    break;
+
                 }
             }).catch((err) => {
                 console.log(err)
             })
         },
+        dateFocus() {
+            this.show = true
+        },
+        dateCancel() {
+            this.show = false
+        },
+        dateConfirm() {
+            let currentTime = new Date(this.currentDate);
+            let month = parseInt(currentTime.getMonth() + 1) >= 10 ? parseInt(currentTime.getMonth() + 1) : "0" + parseInt(currentTime.getMonth() + 1) 
+            let day = currentTime.getDate() >= 10 ? currentTime.getDate() : "0" + currentTime.getDate()
+            this.serviceFeeFactDate = currentTime.getFullYear() + '-' + month + '-' + day
+            this.show = false
+        },
+        formatter(type, value) {
+            if (type === 'year') {
+                return `${value}年`;
+            } else if (type === 'month') {
+                return `${value}月`
+            } else if (type === 'day') {
+                return `${value}日`
+            }
+            return value;
+        },
         submit() {
             let params = {
                 id: this.id,
-                nextStatus: this.status === 'finance' ? '' : this.radioType, // 如果为财务则传空
-                opinion: this.message
+                nextStatus: this.radioType, 
+                opinion: this.message,
+                serviceFeeFact: this.serviceFeeFact,
+                serviceFeeFactDate: this.serviceFeeFactDate
+            }
+            if(this.status == 'finance' && !this.serviceFeeFact) {
+                Toast('实收服务费金额不能为空')
+                return false
+            }
+            
+            if(this.status == 'finance' &&　!this.serviceFeeFactDate) {
+                Toast('实收服务费日期不能为空')
+                return false
             }
             if(!this.message.trim()) {
                 Toast('意见不能为空')
                 return false
             }
+
             biddingApproval(params).then((result) => {
+                let data = result.data
+                if(data.success) {
+                    this.$router.push({
+                        path: '/home', 
+                        query: {isloading: true}
+                    })
+                } else {
+                    Toast(data.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        submitWait() {
+            biddingShopsMortgage(this.id).then((result) => {
                 let data = result.data
                 if(data.success) {
                     this.$router.push({
@@ -196,10 +311,16 @@ export default {
         },
          btn(){
             if(this.radioType == "2"){
-                this.message = "打回"
+                if(this.manage3) {
+                    this.message = "打回到运营编辑"
+                } else {
+                    this.message = "打回到助理"
+                }
             }else  if(this.radioType == "3"){
                 this.message = "拒绝"
-            }else{
+            }else if(this.radioType == "4"){
+                this.message = "打回到风控"
+            }else {
                 this.message = "同意"
             }
          }
@@ -243,7 +364,7 @@ export default {
         color: #606266;
         background: $backgroundColor;
     }
-    textarea {
+    textarea, .rate {
         width: 100%;
         font-size: 13px;
         border: 1px solid transparent;
@@ -354,5 +475,18 @@ export default {
     background: $backgroundColor;
 }
 
+.van-cell {
+    padding: 5px 15px;
+}
+.van-cell__title span {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+.van-cell__value .van-radio {
+    display: flex;
+    height: 100%;
+     align-items: center;
+}
 </style>
 
