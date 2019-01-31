@@ -4,6 +4,9 @@ import  AssignTableList from '../page/Assign/AssignTableList'
 import  Assigindetails from '../page/Assign/Assigindetails'
 import  AssignOperation from '../page/Assign/AssignOperation'
 import  AssetsTable from '../page/AssetsTable/AssetsTable'
+import  MonthlyInterestTable from '../page/MonthlyInterestTable/MonthlyInterestTable'
+
+
 
 
 
@@ -66,6 +69,11 @@ export default new Router({
         path: '/assetstable',
         name: 'AssetsTable',
         component: AssetsTable
+      },
+      {
+        path: '/monthlyinterest',
+        name: 'MonthlyInterestTable',
+        component: MonthlyInterestTable
       },
 
 

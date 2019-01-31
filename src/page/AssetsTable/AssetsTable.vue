@@ -1,5 +1,7 @@
 <template>
         <div class="asstetstable">
+            <van-nav-bar class="dark_header" title="资产到期兑付提醒报表" fixed left-arrow :z-index="999" />
+
           <table id="table1">
               <tr>
                  <th style="width:10px;">部门</th>
@@ -151,6 +153,9 @@ import { Toast,Dialog } from 'vant'
      }
 </script>
 <style lang="scss">
+.van-nav-bar__arrow{
+    display: none !important;
+}
  #table1 tr.bac td{
         height:30px; 
         background:#bd8f2d;
@@ -164,6 +169,7 @@ import { Toast,Dialog } from 'vant'
         font-size: 12px;
         border: 2px solid #999;
         text-align: center;
+           margin-top: 3rem;
         tr{
             th{
                 border: 2px solid #999;

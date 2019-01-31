@@ -62,7 +62,8 @@ export const findLoanAssetReportTable = (date,dateEnd) => fetch('/wxReport/findL
     dateStr: date,
     dateEnd:dateEnd
 })
-
+// 资产月付息预期提醒报表
+export const InterestOverdue = () => fetch('/wxReport/findLoanAssetInterestOverdue')
 
 
 
