@@ -208,7 +208,7 @@ export default {
                 switch(result.data.status) {
                     case 'bidding_finance':
                         this.status = 'finance'
-                        this.manage = [ true, true, true, false ]
+                        this.manage = [ true, true, false, false ]
                     break;
                     case 'bidding_business_manage':
                         this.manage = [ true, false, false, true ]
