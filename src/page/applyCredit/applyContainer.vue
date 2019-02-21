@@ -97,16 +97,16 @@
                             <van-cell title="同意" clickable @click="radioType='1'">
                                 <van-radio name="1" />
                             </van-cell>
-                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage[1]">
+                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage[0]">
                                 <van-radio name="2" />
                             </van-cell>
-                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage[2]">
+                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage[1]">
                                 <van-radio name="4" />
                             </van-cell>
-                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage[3]">
+                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage[2]">
                                 <van-radio name="2" />
                             </van-cell>
-                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage[4]">
+                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage[3]">
                                 <van-radio name="3" />
                             </van-cell>
                         </van-cell-group>
@@ -203,27 +203,26 @@ export default {
                 // bidding_business_manage 只有打回到业务助理
                 // bidding_operate_manage 只有打回到运营编辑，传2
                 // bidding_wait 其它的输入全部都隐藏，只单独显示一个操作按钮
+                // bidding_ceo 没有打回到运营编辑
                 this.status = result.data.hasWorkflowRight ? true : false
                 switch(result.data.status) {
                     case 'bidding_finance':
                         this.status = 'finance'
-                        this.manage[3] = false
+                        this.manage = [ true, true, true, false ]
                     break;
                     case 'bidding_business_manage':
-                        this.manage[1] = true
-                        this.manage[2] = false
-                        this.manage[3] = false
+                        this.manage = [ true, false, false, true ]
                     break;
                     case 'bidding_operate_manage':
-                        this.manage[1] = false
-                        this.manage[2] = false
-                        this.manage[3] = true
+                        this.manage = [ false, false, true, true ]
                     break;
                     case 'bidding_wait':
                         this.status = false
                         this.bidding_wait = true
                     break;
-
+                    case 'bidding_ceo':
+                        this.manage = [ true, true, false, true ]
+                    break;
                 }
             }).catch((err) => {
                 console.log(err)
