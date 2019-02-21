@@ -173,7 +173,7 @@ export default {
             dataList: [],
             status: false, // 控件输入内容的
             // 1. 打回到助理 2. 打回到风控 3. 打回到运营编辑 4. 是否有拒绝
-            manage: [true, true, true, true],
+            manage: [true, true, false, true],
             bidding_wait: false, // 运营发标
             show: false,
             // minDate: new Date(2018, 1, 1),
