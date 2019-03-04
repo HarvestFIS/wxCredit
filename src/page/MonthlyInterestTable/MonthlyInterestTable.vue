@@ -7,7 +7,7 @@
                  <th>性质</th>
                  <th>资产名称</th>
                  <th>借款金额</th>
-                 <th style="width: 65px;">应收利息金额</th>
+                 <th style="width: 65px;">应收利息</th>
                  <th style="width: 65px;">应收时间</th>
               </tr>
               <tr v-for = "item in item" :key="item.name">
