@@ -50,9 +50,22 @@ Vue.filter('formatTime', (dateTime) => {
     let hh = date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()
     let mm = date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes()
     let ss = date.getSeconds() < 10 ? ("0" + date.getSeconds()) : date.getSeconds()
-    return Y + '-' + M + '-' + D ;
-    
-})
+    return Y + '-' + M + '-' + D;
+});
+
+Vue.filter('formatTimeAll', (dateTime) => {
+    if (dateTime == null) {
+        return ""
+    }
+    let date = new Date(dateTime)
+    let Y = date.getFullYear()
+    let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+    let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+    let hh = date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()
+    let mm = date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes()
+    let ss = date.getSeconds() < 10 ? ("0" + date.getSeconds()) : date.getSeconds()
+    return Y + '-' + M + '-' + D + ' ' + hh + ':' + mm + ':' + ss;
+});
 
 Vue.filter('assetstableType', (status) => {
     if(status == 'PERSONNEL'){

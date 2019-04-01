@@ -148,7 +148,7 @@
                     <div class="popover">{{ applyItem.opinion }}
                         <div class="popover-ownerInfo">
                             {{ applyItem.updateBy }} <br />
-                            批准于: {{ applyItem.changeTime | formatTime }}
+                            批准于: {{ applyItem.changeTime | formatTimeAll }}
                         </div>
                         <div class="popover-arrow"></div>
                     </div>
