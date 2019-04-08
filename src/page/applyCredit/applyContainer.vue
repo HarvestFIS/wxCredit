@@ -92,7 +92,7 @@
             <tr v-if="radioFreezeType">
                 <th>借款账户取现冻结</th>
                 <td colspan="3">
-                    <van-radio-group v-model="radioFreeze">
+                    <van-radio-group v-model="radioFreeze" @change="btn()">
                         <van-cell-group>
                             <van-cell title="是"  @click="radioFreeze='1'">
                                <van-radio name="1" />
@@ -215,13 +215,23 @@ export default {
                 this.serviceFeeFact = result.data.serviceFeeFact
                 this.serviceFeeFactDate = result.data.serviceFeeFactDate
                 this.currentDate = result.data.serviceFeeFactDate ? new Date(result.data.serviceFeeFactDate) : new Date()
-                this.radioFreeze = result.data.freezeAccountRisk ? result.data.freezeAccountRisk + "" : "0";
+                if(result.data.freezeAccountRisk) {
+                    this.radioFreeze = result.data.freezeAccountRisk + ''
+                    if(result.data.status == 'bidding_finance') {
+                        this.message += '，服务费未到账，借款账户提现功能进行冻结'
+                    }
+                    if(result.data.status == 'bidding_risk_manage') {
+                        this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
+                    }
+                }
+                
                 // hasWorkflowRight -> 是否显示审批意见
                 // 如果是财务则不显示拒绝）
                 // bidding_business_manage 只有打回到业务助理
                 // bidding_operate_manage 只有打回到运营编辑，传2
                 // bidding_wait 其它的输入全部都隐藏，只单独显示一个操作按钮
                 // bidding_ceo 没有打回到运营编辑
+                // 只能财务和风控总监 显示是否冻结
                 this.status = result.data.hasWorkflowRight ? true : false
                 switch(result.data.status) {
                     case 'bidding_finance':
@@ -274,13 +284,6 @@ export default {
             return value;
         },
         submit() {
-            let params = {
-                id: this.id,
-                nextStatus: this.radioType, 
-                opinion: this.message,
-                serviceFeeFact: this.serviceFeeFact,
-                serviceFeeFactDate: this.serviceFeeFactDate
-            }
             if(this.status == 'finance' && !this.serviceFeeFact) {
                 Toast('实收服务费金额不能为空')
                 return false
@@ -295,12 +298,16 @@ export default {
                 return false
             }
 
-            if(this.dataList.status == 'bidding_finance') {
-                params.freezeAccountFinance = this.radioFreeze
-            } else if(this.dataList.status == 'freezeAccountFinance') {
-                params.freezeAccountRisk = this.radioFreeze
+            let params = {
+                id: this.id,
+                nextStatus: this.radioType, 
+                opinion: this.message,
+                serviceFeeFact: this.serviceFeeFact,
+                serviceFeeFactDate: this.serviceFeeFactDate,
+                freezeAccountFinance: this.dataList.status == 'bidding_finance' ? this.radioFreeze : '',
+                freezeAccountRisk: this.dataList.status == 'bidding_risk_manage' ? this.radioFreeze : ''
             }
-
+            
             biddingApproval(params).then((result) => {
                 let data = result.data
                 if(data.success) {
@@ -336,7 +343,7 @@ export default {
                 query: {isloading: true}
             })
         },
-         btn(){
+        btn(){
             if(this.radioType == "2"){
                 if(this.manage3) {
                     this.message = "打回到运营编辑"
@@ -350,7 +357,15 @@ export default {
             }else {
                 this.message = "同意"
             }
-         }
+             if(this.radioFreeze == 1) {
+                if(this.dataList.status == 'bidding_finance') {
+                    this.message += '，服务费未到账，借款账户提现功能进行冻结'
+                }
+                if(this.dataList.status == 'bidding_risk_manage') {
+                    this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
+                }
+            }
+        }
     }
 }
 </script>
