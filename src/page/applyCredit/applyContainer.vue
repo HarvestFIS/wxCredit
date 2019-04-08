@@ -89,6 +89,21 @@
                     </van-popup>
                 </td>
             </tr>
+            <tr v-if="radioFreezeType">
+                <th>借款账户取现冻结</th>
+                <td colspan="3">
+                    <van-radio-group v-model="radioFreeze">
+                        <van-cell-group>
+                            <van-cell title="是"  @click="radioFreeze='1'">
+                               <van-radio name="1" />
+                            </van-cell>
+                            <van-cell title="否"  @click="radioFreeze='0'">
+                                <van-radio name="0" />
+                            </van-cell>
+                        </van-cell-group>
+                    </van-radio-group>
+                </td>
+            </tr>
             <tr v-if="status">
                 <th rowspan="2">审批意见</th>
                 <td colspan="3" style="padding: 0;">
@@ -166,6 +181,8 @@ export default {
     props: ["id"],
     data() {
         return {
+            radioFreeze: '0', // 借款账户取现冻结
+            radioFreezeType: false, // 借款账户取现冻结默认状态
             radioType: "1",
             message: '同意',
             serviceFeeFact: '',
@@ -198,6 +215,7 @@ export default {
                 this.serviceFeeFact = result.data.serviceFeeFact
                 this.serviceFeeFactDate = result.data.serviceFeeFactDate
                 this.currentDate = result.data.serviceFeeFactDate ? new Date(result.data.serviceFeeFactDate) : new Date()
+                this.radioFreeze = result.data.freezeAccountRisk ? result.data.freezeAccountRisk + "" : "0";
                 // hasWorkflowRight -> 是否显示审批意见
                 // 如果是财务则不显示拒绝）
                 // bidding_business_manage 只有打回到业务助理
@@ -209,6 +227,10 @@ export default {
                     case 'bidding_finance':
                         this.status = 'finance'
                         this.manage = [ true, true, false, false ]
+                        this.radioFreezeType = true
+                    break;
+                    case 'bidding_risk_manage':
+                        this.radioFreezeType = true
                     break;
                     case 'bidding_business_manage':
                         this.manage = [ true, false, false, true ]
@@ -271,6 +293,12 @@ export default {
             if(!this.message.trim()) {
                 Toast('意见不能为空')
                 return false
+            }
+
+            if(this.dataList.status == 'bidding_finance') {
+                params.freezeAccountFinance = this.radioFreeze
+            } else if(this.dataList.status == 'freezeAccountFinance') {
+                params.freezeAccountRisk = this.radioFreeze
             }
 
             biddingApproval(params).then((result) => {
