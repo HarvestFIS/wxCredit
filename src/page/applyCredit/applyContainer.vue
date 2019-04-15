@@ -90,15 +90,16 @@
                 </td>
             </tr>
             <tr v-if="radioFreezeType">
-                <th>借款账户取现冻结</th>
+                <th v-if="dataList.status == 'bidding_finance'">服务费是否到账</th>
+                <th v-else>风控材料是否完整</th>
                 <td colspan="3">
                     <van-radio-group v-model="radioFreeze" @change="btn()">
                         <van-cell-group>
-                            <van-cell title="是"  @click="radioFreeze='1'">
-                               <van-radio name="1" />
+                            <van-cell title="是"  @click="radioFreeze='0'">
+                               <van-radio name="0" />
                             </van-cell>
-                            <van-cell title="否"  @click="radioFreeze='0'">
-                                <van-radio name="0" />
+                            <van-cell title="否"  @click="radioFreeze='1'">
+                                <van-radio name="1" />
                             </van-cell>
                         </van-cell-group>
                     </van-radio-group>
@@ -215,10 +216,13 @@ export default {
                 this.serviceFeeFact = result.data.serviceFeeFact
                 this.serviceFeeFactDate = result.data.serviceFeeFactDate
                 this.currentDate = result.data.serviceFeeFactDate ? new Date(result.data.serviceFeeFactDate) : new Date()
-                if(result.data.freezeAccountRisk) {
+                if(result.data.freezeAccountRisk == 1) {
                     this.radioFreeze = result.data.freezeAccountRisk + ''
                     if(result.data.status == 'bidding_finance') {
-                        this.message += '，服务费未到账，借款账户提现功能进行冻结'
+                        let date = new Date()
+                        let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+                        let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+                        this.message += '，' + M + '月' + D + '日，实收' + (result.data.serviceFeeAmount?result.data.serviceFeeAmount:0) + '元';
                     }
                     if(result.data.status == 'bidding_risk_manage') {
                         this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
@@ -357,9 +361,13 @@ export default {
             }else {
                 this.message = "同意"
             }
-             if(this.radioFreeze == 1) {
+            if(this.radioFreeze == 1) {
                 if(this.dataList.status == 'bidding_finance') {
-                    this.message += '，服务费未到账，借款账户提现功能进行冻结'
+                        let date = new Date()
+                        let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+                        let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+                        this.message += '，' + M + '月' + D + '日，实收' + (this.dataList.serviceFeeAmount?this.dataList.serviceFeeAmount:0) + '元';
+                    // }
                 }
                 if(this.dataList.status == 'bidding_risk_manage') {
                     this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
