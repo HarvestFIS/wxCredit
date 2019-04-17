@@ -216,17 +216,15 @@ export default {
                 this.serviceFeeFact = result.data.serviceFeeFact
                 this.serviceFeeFactDate = result.data.serviceFeeFactDate
                 this.currentDate = result.data.serviceFeeFactDate ? new Date(result.data.serviceFeeFactDate) : new Date()
-                if(result.data.freezeAccountRisk == 1) {
+                
+                if(result.data.status == 'bidding_risk_manage' && result.data.freezeAccountRisk == 1) {
                     this.radioFreeze = result.data.freezeAccountRisk + ''
-                    if(result.data.status == 'bidding_finance') {
-                        let date = new Date()
-                        let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
-                        let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
-                        this.message += '，' + M + '月' + D + '日，实收' + (result.data.serviceFeeAmount?result.data.serviceFeeAmount:0) + '元';
-                    }
-                    if(result.data.status == 'bidding_risk_manage') {
-                        this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
-                    }
+                    this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
+                } else if(result.data.status == 'bidding_finance') {
+                    let date = new Date()
+                    let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+                    let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+                    this.message += '，' + M + '月' + D + '日，实收' + (result.data.serviceFeeAmount?result.data.serviceFeeAmount:0) + '元';
                 }
                 
                 // hasWorkflowRight -> 是否显示审批意见
@@ -363,14 +361,17 @@ export default {
             }
             if(this.radioFreeze == 1) {
                 if(this.dataList.status == 'bidding_finance') {
-                        let date = new Date()
-                        let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
-                        let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
-                        this.message += '，' + M + '月' + D + '日，实收' + (this.dataList.serviceFeeAmount?this.dataList.serviceFeeAmount:0) + '元';
-                    // }
+                    this.message += '，服务费未到账，借款账户提现功能进行冻结'
                 }
                 if(this.dataList.status == 'bidding_risk_manage') {
                     this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
+                }
+            } else if(this.radioFreeze == 0) {
+                if(this.dataList.status == 'bidding_finance') {
+                    let date = new Date()
+                    let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+                    let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+                    this.message += '，' + M + '月' + D + '日，实收' + (this.dataList.serviceFeeAmount?this.dataList.serviceFeeAmount:0) + '元';
                 }
             }
         }
