@@ -10,10 +10,6 @@
                 <th>编号</th>
                 <td>{{ dataList.biddingNo }}</td>
             </tr>
-            
-            <!-- <tr>
-                <td class="split-height" colspan="4"></td>
-            </tr> -->
         </table>
         <table v-for="mainItem in dataList.main" :key="mainItem.id" class="apply marginB10" border="1">
             <tr>
@@ -29,6 +25,26 @@
                 <td>{{ mainItem.gracePeriodRisk }}天</td>
             </tr>
         </table>
+
+        <table class="apply" v-if="dataList.productAlias == 'supplychain'" border="1">
+            <tr v-for="(item, index) in dataList.warrantors" :key="item.idCard">
+                <th>担保企业（人）{{ index + 1 }}</th>
+                <td style="width: 90px;">{{item.name}}</td>
+                <th>证件号</th>
+                <td>{{item.idCard}}</td>
+            </tr>
+            <tr v-if="dataList.model == 'COLLECT'">
+                <th>放款类型</th>
+                <td style="width: 90px;">代收付</td>
+                <th>代收付收款人</th>
+                <td style="word-break: break-all;">{{dataList.collectorName}}</td>
+            </tr>
+            <tr v-if="dataList.model == 'DIRECT'">
+                <th>放款类型</th>
+                <td style="width: 90px;">直投</td>
+            </tr>
+        </table>
+
         <table class="apply" border="1">
             <tr>
                 <th>抵押物价值</th>
@@ -434,8 +450,6 @@ export default {
         }
     }
 }
-
-
 
 .timer-container {
     padding-bottom: 30px;
