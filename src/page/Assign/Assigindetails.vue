@@ -57,7 +57,7 @@
                     <th>放款类型</th>
                     <td style="width: 90px;">代收付</td>
                     <th>代收付收款人</th>
-                    <td>{{extend.collectorName}}</td>
+                    <td style="word-break: break-all;">{{dataItem.collectorName}}</td>
                 </tr>
                 <tr v-if="extend.model == 'DIRECT'">
                     <th>放款类型</th>
