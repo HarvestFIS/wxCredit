@@ -430,6 +430,7 @@ export default {
     td {
         color: #606266;
         background: $backgroundColor;
+        word-break: break-all;
     }
     textarea, .rate {
         width: 100%;
