@@ -74,3 +74,15 @@ Vue.filter('assetstableType', (status) => {
         return  '供应链'
     }
 })
+
+Vue.filter('unfreezeToCN', (status) => {
+    let params = {
+        unfreeze_apply: "解冻申请",
+        unfreeze_finance: "财务审核",
+        unfreeze_risk_wait: "风控经理审核",
+        unfreeze_risk_manage: "风控总监审核",
+        unfreeze_success: "通过",
+        unfreeze_reject: "拒绝"
+    }
+    return params[status]
+})

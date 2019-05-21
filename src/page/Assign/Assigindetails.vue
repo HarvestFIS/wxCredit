@@ -14,7 +14,6 @@
                     <tr>
                         <th>申请期限</th>
                         <td style="width: 90px;">{{item.limit}}天</td>
-                    
                     </tr>
             </table>
         </div>
@@ -105,6 +104,7 @@
                     <td style="width: 90px;">{{risk.riskGracePeriod}}天</td>
                     <th>还款方式</th>
                     <td v-if="risk.riskRepaymentType == '2'">按月付息到期还本</td>
+                    <td v-if="risk.riskRepaymentType == '1'">一次性还本付息</td>
                 </tr>
 
                 <tr>

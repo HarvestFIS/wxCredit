@@ -1,5 +1,5 @@
 <template>
-    <div class="applyContainer">
+    <div class="unFreezeContainer">
         <table class="apply marginB10" border="1">
             <caption>
                 当前状态: {{ dataList.status | creditStatus }}
@@ -73,10 +73,19 @@
             </tr>
             <tr>
                 <th>还款方式</th>
-                <td v-if="dataList.riskRepaymentType == '2'">按月付息到期还本</td>
-                <td v-if="dataList.riskRepaymentType == '1'">一次性还本付息</td>
+                <td>{{ dataList.repaymentType == 2 ? "按月付息到期还本" : ""}}</td>
                 <th>经办人</th>
                 <td>{{ dataList.updater }}</td>
+            </tr>
+            <tr>
+                <th>服务费凭证备注</th>
+                <td>{{ dataList.serviceFeeExplain }}</td>
+                <th>解冻申请说明</th>
+                <td>{{ dataList.unfreezeExplain }}</td>
+            </tr>
+            <tr>
+                <th>解冻状态</th>
+                <td colspan="3">{{ dataList.unfreezeStatus | unfreezeToCN }}</td>
             </tr>
             <tr v-if="status == 'finance'">
                 <th>应收服务费说明</th>
@@ -107,7 +116,7 @@
                 </td>
             </tr>
             <tr v-if="radioFreezeType">
-                <th v-if="dataList.status == 'bidding_finance'">服务费是否到账</th>
+                <th v-if="status == 'finance'">服务费是否到账</th>
                 <th v-else>风控材料是否完整</th>
                 <td colspan="3">
                     <van-radio-group v-model="radioFreeze" @change="btn()">
@@ -127,19 +136,13 @@
                 <td colspan="3" style="padding: 0;">
                     <van-radio-group v-model="radioType" @change="btn()">
                         <van-cell-group>
-                            <van-cell title="同意" clickable @click="radioType='1'">
+                            <van-cell title="提交" clickable @click="radioType='1'">
                                 <van-radio name="1" />
                             </van-cell>
-                            <van-cell title="打回到助理" clickable @click="radioType='2'" v-show="manage[0]">
+                            <van-cell title="打回" clickable @click="radioType='2'" v-show="manage[0]">
                                 <van-radio name="2" />
                             </van-cell>
-                            <van-cell title="打回到风控" clickable @click="radioType='4'" v-show="manage[1]">
-                                <van-radio name="4" />
-                            </van-cell>
-                            <van-cell title="打回到运营编辑" clickable @click="radioType='2'" v-show="manage[2]">
-                                <van-radio name="2" />
-                            </van-cell>
-                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage[3]">
+                            <van-cell title="拒绝" clickable @click="radioType='3'"  v-show="manage[1]">
                                 <van-radio name="3" />
                             </van-cell>
                         </van-cell-group>
@@ -173,7 +176,7 @@
 
         <div class="timer-container">
             <div class="timer-title">
-                流转意见
+                解冻历程
             </div>
             <ul class="time-vertical">
                 <li v-for="applyItem in dataList.approvalProcess" :key="applyItem.id">
@@ -193,22 +196,22 @@
 
 <script>
 import { RadioGroup, Radio, Toast, Popup } from 'vant'
-import { findBiddingInfo, biddingApproval, biddingShopsMortgage } from 'api/api'
+import { findBiddingInfo, unfreezeApproval, biddingShopsMortgage } from 'api/api'
 export default {
-    name: 'applyContainer',
+    name: 'unFreezeContainer',
     props: ["id"],
     data() {
         return {
             radioFreeze: '0', // 借款账户取现冻结
             radioFreezeType: false, // 借款账户取现冻结默认状态
             radioType: "1",
-            message: '同意',
+            message: '提交',
             serviceFeeFact: '',
             serviceFeeFactDate: '',
             dataList: [],
             status: false, // 控件输入内容的
-            // 1. 打回到助理 2. 打回到风控 3. 打回到运营编辑 4. 是否有拒绝
-            manage: [true, true, false, true],
+            // 1. 是否有打回 3. 是否有拒绝
+            manage: [true, true],
             bidding_wait: false, // 运营发标
             show: false,
             // minDate: new Date(2018, 1, 1),
@@ -252,27 +255,19 @@ export default {
                 // bidding_ceo 没有打回到运营编辑
                 // 只能财务和风控总监 显示是否冻结
                 this.status = result.data.hasWorkflowRight ? true : false
-                switch(result.data.status) {
-                    case 'bidding_finance':
+                // this.status = true
+                switch(result.data.unfreezeStatus) {
+                    case 'unfreeze_finance':
+                        this.manage = [ true, false ]
                         this.status = 'finance'
-                        this.manage = [ true, true, false, false ]
                         this.radioFreezeType = true
                     break;
-                    case 'bidding_risk_manage':
+                    case 'unfreeze_risk_wait':
+                        this.manage = [ true, true ]
+                    break;
+                    case 'unfreeze_risk_manage':
+                        this.manage = [ true, true ]
                         this.radioFreezeType = true
-                    break;
-                    case 'bidding_business_manage':
-                        this.manage = [ true, false, false, true ]
-                    break;
-                    case 'bidding_operate_manage':
-                        this.manage = [ false, false, true, true ]
-                    break;
-                    case 'bidding_wait':
-                        this.status = false
-                        this.bidding_wait = true
-                    break;
-                    case 'bidding_ceo':
-                        this.manage = [ true, true, false, true ]
                     break;
                 }
             }).catch((err) => {
@@ -317,6 +312,25 @@ export default {
                 return false
             }
 
+            let data = this.dataList
+            // console.log(this.radioType)
+            // console.log(this.radioFreeze)
+            if(data.unfreezeStatus == 'unfreeze_finance' && this.radioType == '2' && this.radioFreeze == '0') {
+                Toast('审批意见为打回时，服务费是否到账不能为是')
+                return false
+            }
+
+            if(this.radioType == '1' && this.radioFreeze == '1') {
+                if(data.unfreezeStatus == 'unfreeze_finance') {
+                    Toast('审批意见为提交时，服务费是否到账不能为否')
+                    return false
+                } else if (data.unfreezeStatus == 'unfreeze_risk_manage') {
+                    Toast('审批意见为提交时，风控材料是否完整不能为否')
+                    return false
+                }
+            }
+
+            // return false
             let params = {
                 id: this.id,
                 nextStatus: this.radioType, 
@@ -327,7 +341,7 @@ export default {
                 freezeAccountRisk: this.dataList.status == 'bidding_risk_manage' ? this.radioFreeze : ''
             }
             
-            biddingApproval(params).then((result) => {
+            unfreezeApproval(params).then((result) => {
                 let data = result.data
                 if(data.success) {
                     this.$router.push({
@@ -364,17 +378,11 @@ export default {
         },
         btn(){
             if(this.radioType == "2"){
-                if(this.manage3) {
-                    this.message = "打回到运营编辑"
-                } else {
-                    this.message = "打回到助理"
-                }
+                this.message = "打回"
             }else  if(this.radioType == "3"){
                 this.message = "拒绝"
-            }else if(this.radioType == "4"){
-                this.message = "打回到风控"
             }else {
-                this.message = "同意"
+                this.message = "提交"
             }
             if(this.radioFreeze == 1) {
                 if(this.dataList.status == 'bidding_finance') {

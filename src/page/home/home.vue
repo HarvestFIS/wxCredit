@@ -19,6 +19,7 @@
                     <span>{{ item.statusName }}</span>
                     <span>
                         <router-link v-if="item.hasWorkflowRight" style="margin-right: 8px;" :to="{ name: 'applyCredit', query: { type: 'edit', id: item.id }}">上标审核</router-link>
+                        <router-link v-if="item.unfreezeProcessInstanceId" style="margin-right: 8px;" :to="{ name: 'applyUnfreeze', query: { type: 'edit', id: item.id }}">解冻查看</router-link>
                         <router-link :to="{ name: 'applyCredit', query: { type: 'look', id: item.id }}">查看</router-link>
                     </span>
                 </van-cell>

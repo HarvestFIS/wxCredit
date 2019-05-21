@@ -16,6 +16,7 @@ Vue.use(Router)
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const applyCredit = r => require.ensure([], () => r(require('../page/applyCredit/applyCredit')), 'applyCredit')
 const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
+const applyUnfreeze = r => require.ensure([], () => r(require('../page/applyUnfreeze/applyUnfreeze')), 'applyUnfreeze')
 
 export default new Router({
   routes: [
@@ -49,6 +50,14 @@ export default new Router({
       },
       component: login
     },
+      {
+        path: '/applyUnfreeze',
+        name: 'applyUnfreeze',
+        meta: {
+          index: 3
+        },
+        component: applyUnfreeze
+      },
      {
         path: '/assigntablelist',
         name: 'AssignTableList',
@@ -73,9 +82,8 @@ export default new Router({
       {
         path: '/monthlyinterest',
         name: 'MonthlyInterestTable',
-        component: MonthlyInterestTable
-      },
-
+        component: MonthlyInterestTable 
+      }
 
       
   ]
