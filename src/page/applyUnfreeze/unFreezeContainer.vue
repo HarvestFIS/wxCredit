@@ -136,7 +136,7 @@
                 <td colspan="3" style="padding: 0;">
                     <van-radio-group v-model="radioType" @change="btn()">
                         <van-cell-group>
-                            <van-cell title="提交" clickable @click="radioType='1'">
+                            <van-cell title="同意" clickable @click="radioType='1'">
                                 <van-radio name="1" />
                             </van-cell>
                             <van-cell title="打回" clickable @click="radioType='2'" v-show="manage[0]">
@@ -205,7 +205,7 @@ export default {
             radioFreeze: '0', // 借款账户取现冻结
             radioFreezeType: false, // 借款账户取现冻结默认状态
             radioType: "1",
-            message: '提交',
+            message: '同意',
             serviceFeeFact: '',
             serviceFeeFactDate: '',
             dataList: [],
@@ -322,10 +322,10 @@ export default {
 
             if(this.radioType == '1' && this.radioFreeze == '1') {
                 if(data.unfreezeStatus == 'unfreeze_finance') {
-                    Toast('审批意见为提交时，服务费是否到账不能为否')
+                    Toast('审批意见为同意时，服务费是否到账不能为否')
                     return false
                 } else if (data.unfreezeStatus == 'unfreeze_risk_manage') {
-                    Toast('审批意见为提交时，风控材料是否完整不能为否')
+                    Toast('审批意见为同意时，风控材料是否完整不能为否')
                     return false
                 }
             }
@@ -337,10 +337,9 @@ export default {
                 opinion: this.message,
                 serviceFeeFact: this.serviceFeeFact,
                 serviceFeeFactDate: this.serviceFeeFactDate,
-                freezeAccountFinance: this.dataList.status == 'bidding_finance' ? this.radioFreeze : '',
-                freezeAccountRisk: this.dataList.status == 'bidding_risk_manage' ? this.radioFreeze : ''
+                freezeAccountFinance: this.dataList.unfreezeStatus == 'unfreeze_finance' ? this.radioFreeze : '',
+                freezeAccountRisk: this.dataList.unfreezeStatus == 'unfreeze_risk_manage' ? this.radioFreeze : ''
             }
-            
             unfreezeApproval(params).then((result) => {
                 let data = result.data
                 if(data.success) {
@@ -382,7 +381,7 @@ export default {
             }else  if(this.radioType == "3"){
                 this.message = "拒绝"
             }else {
-                this.message = "提交"
+                this.message = "同意"
             }
             if(this.radioFreeze == 1) {
                 if(this.dataList.status == 'bidding_finance') {
