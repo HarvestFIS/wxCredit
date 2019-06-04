@@ -213,7 +213,8 @@ export default {
             show: false,
             // minDate: new Date(2018, 1, 1),
             // maxDate: new Date(2099, 12, 31),
-            currentDate: new Date()
+            currentDate: new Date(),
+            dateAmount:''
         }
     }, 
     components: { RadioGroup, Radio, Toast },
@@ -238,10 +239,8 @@ export default {
                     this.radioFreeze = result.data.freezeAccountRisk + ''
                     this.message += '，风控材料部分未完成审核，借款账户提现功能进行冻结'
                 } else if(result.data.status == 'bidding_finance') {
-                    let date = new Date()
-                    let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
-                    let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
-                    this.message += '，' + M + '月' + D + '日，实收' + (result.data.serviceFeeAmount?result.data.serviceFeeAmount:0) + '元';
+                    this.dateAmount  = result.data.serviceFeeAmount;
+                    this.funTextDate();
                 }
                 
                 // hasWorkflowRight -> 是否显示审批意见
@@ -279,6 +278,21 @@ export default {
                 console.log(err)
             })
         },
+        funTextDate(){
+            let M= this.serviceFeeFactDate.substr(5, 2)
+            let D= this.serviceFeeFactDate.substr(8, 2)
+            if(this.message.indexOf("同意") != -1){
+                this.message = ''
+                this.message = '同意，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+            }else if(this.message.indexOf("打回到助理") != -1){
+                this.message = ''
+                this.message = '打回到助理，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+            }else if(this.message.indexOf("打回到风控") != -1){
+                this.message = ''
+                this.message = '打回到风控，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+            }
+          
+        },
         dateFocus() {
             this.show = true
         },
@@ -290,6 +304,7 @@ export default {
             let month = parseInt(currentTime.getMonth() + 1) >= 10 ? parseInt(currentTime.getMonth() + 1) : "0" + parseInt(currentTime.getMonth() + 1) 
             let day = currentTime.getDate() >= 10 ? currentTime.getDate() : "0" + currentTime.getDate()
             this.serviceFeeFactDate = currentTime.getFullYear() + '-' + month + '-' + day
+            this.funTextDate()
             this.show = false
         },
         formatter(type, value) {
@@ -385,10 +400,8 @@ export default {
                 }
             } else if(this.radioFreeze == 0) {
                 if(this.dataList.status == 'bidding_finance') {
-                    let date = new Date()
-                    let M = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
-                    let D = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
-                    this.message += '，' + M + '月' + D + '日，实收' + (this.dataList.serviceFeeAmount?this.dataList.serviceFeeAmount:0) + '元';
+                    this.dateAmount  = this.dataList.serviceFeeAmount;
+                    this.funTextDate();
                 }
             }
         }
