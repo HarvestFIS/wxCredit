@@ -279,18 +279,26 @@ export default {
             })
         },
         funTextDate(){
-            let M= this.serviceFeeFactDate.substr(5, 2)
-            let D= this.serviceFeeFactDate.substr(8, 2)
-            if(this.message.indexOf("同意") != -1){
-                this.message = ''
-                this.message = '同意，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
-            }else if(this.message.indexOf("打回到助理") != -1){
-                this.message = ''
-                this.message = '打回到助理，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
-            }else if(this.message.indexOf("打回到风控") != -1){
-                this.message = ''
-                this.message = '打回到风控，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+            if(this.serviceFeeFactDate == ''){
+                let date = new Date()
+                let moth = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+                let data2 = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+                this.message += '，' + moth + '月' + data2 + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+            }else{
+                let M= this.serviceFeeFactDate.substr(5, 2)
+                let D= this.serviceFeeFactDate.substr(8, 2)
+                if(this.message.indexOf("同意") != -1){
+                    this.message = ''
+                    this.message = '同意，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+                }else if(this.message.indexOf("打回到助理") != -1){
+                    this.message = ''
+                    this.message = '打回到助理，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+                }else if(this.message.indexOf("打回到风控") != -1){
+                    this.message = ''
+                    this.message = '打回到风控，' + M + '月' + D + '日，实收' + (this.dateAmount?this.dateAmount:0) + '元';
+                }
             }
+         
           
         },
         dateFocus() {
